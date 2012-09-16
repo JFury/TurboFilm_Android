@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TurboFilm</string>
+	<string name="login">Логин</string>
+	<string name="password">Пароль</string>
+	<string name="enter">Войти</string>
+	<string name="seasonsCount">Сезонов: </string>
+	<string name="episodesCount">Эпизодов: </string>
+</resources>
