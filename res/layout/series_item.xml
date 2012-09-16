@@ -7,7 +7,7 @@
 		>
 
 	<ImageView
-			android:id="@+id/logo"
+			android:id="@+id/cover"
 			android:layout_width="370dp"
 			android:layout_height="125dp"
 			/>
@@ -48,6 +48,7 @@
 				android:layout_below="@id/nameEn"
 				android:textColor="@color/light"
 				android:text="@string/seasonsCount"
+				android:paddingRight="3dp"
 				/>
 		<TextView
 				android:id="@+id/seasonsCount"
@@ -55,8 +56,8 @@
 				android:layout_height="wrap_content"
 				android:layout_below="@id/nameEn"
 				android:layout_toRightOf="@id/seas"
+				android:paddingRight="15dp"
 				android:textColor="@color/light"
-				android:paddingRight="5dp"
 				android:text="15"
 				/>
 		<TextView
@@ -67,7 +68,7 @@
 				android:text="@string/episodesCount"
 				android:layout_toRightOf="@id/seasonsCount"
 				android:textColor="@color/light"
-				android:paddingLeft="20dp"
+				android:paddingRight="3dp"
 				/>
 		<TextView
 				android:id="@+id/episodesCount"
@@ -76,7 +77,6 @@
 				android:layout_below="@id/nameEn"
 				android:layout_toRightOf="@+id/epis"
 				android:textColor="@color/light"
-				android:paddingRight="5dp"
 				android:text="102"
 				/>
 		<TextView

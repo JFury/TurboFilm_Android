@@ -18,7 +18,7 @@ public class SeriesParser {
 	public static List<Series> parse(String source) {
 
 		Pattern allSeriesPattern = Pattern.compile("<div id=\"series\">(.*?)<div id=\"footer\">", Pattern.DOTALL);
-		Pattern seriesPattern = Pattern.compile("\\s<a href=\"(.*?)\">\\s(.*?)</a>", Pattern.DOTALL);
+		Pattern seriesPattern = Pattern.compile("\\s<a href=\"/Series/(.*?)\">\\s(.*?)</a>", Pattern.DOTALL);
 
 		Matcher matcher = allSeriesPattern.matcher(source);
 

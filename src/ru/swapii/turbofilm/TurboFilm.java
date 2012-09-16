@@ -13,6 +13,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import ru.swapii.turbofilm.model.Episode;
 import ru.swapii.turbofilm.model.Series;
+import ru.swapii.turbofilm.parsers.EpisodesParser;
 import ru.swapii.turbofilm.parsers.SeriesParser;
 
 import java.io.IOException;
@@ -109,9 +110,28 @@ public class TurboFilm {
 		return new ArrayList<Series>();
 	}
 
-	public List<Episode> getEpisodes(String urlPath, int seasonNumber) {
+	public List<Episode> getEpisodes(String urlPath, int seasonNumber) throws IOException, NotLoggedInException {
 
-		return null;
+		HttpGet get = new HttpGet(SITE + "Series/" + urlPath + "/Season" + seasonNumber);
+
+		get.getParams().setBooleanParameter("http.protocol.handle-redirects", false);
+
+		HttpResponse response = client.execute(get);
+
+		int statusCode = response.getStatusLine().getStatusCode();
+
+		String page = IOUtils.toString(response.getEntity().getContent());
+
+		if (statusCode == 200) {
+
+			return EpisodesParser.parse(page);
+
+		} else if (statusCode == 302 && response.getFirstHeader("location").getValue().equals("/Signin")) {
+
+			throw new NotLoggedInException();
+		}
+
+		return new ArrayList<Episode>();
 	}
 
 }

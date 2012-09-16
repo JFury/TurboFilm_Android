@@ -3,6 +3,8 @@
 	<string name="login">Логин</string>
 	<string name="password">Пароль</string>
 	<string name="enter">Войти</string>
-	<string name="seasonsCount">Сезонов: </string>
-	<string name="episodesCount">Эпизодов: </string>
+	<string name="seasonsCount">Сезонов:</string>
+	<string name="episodesCount">Эпизодов:</string>
+	<string name="season">Сезон:</string>
+	<string name="episode">Эпизод:</string>
 </resources>

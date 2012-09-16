@@ -95,11 +95,11 @@ public class DrawableCache {
 		return response.getEntity().getContent();
 	}
 
-	public void request(final String mediumLogoUrl, final FutureData<Drawable> future) {
+	public void request(final String drawableUrl, final FutureData<Drawable> future) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Drawable drawable = fetchDrawable(mediumLogoUrl);
+				Drawable drawable = fetchDrawable(drawableUrl);
 				future.done(drawable);
 			}
 		}).start();

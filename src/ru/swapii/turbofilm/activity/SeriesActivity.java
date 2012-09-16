@@ -29,6 +29,7 @@ import java.util.List;
 public class SeriesActivity extends Activity {
 
 	public void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.series);
 
@@ -49,8 +50,9 @@ public class SeriesActivity extends Activity {
 							((ListView) findViewById(R.id.seriesList)).setOnItemClickListener(new ListView.OnItemClickListener() {
 								@Override
 								public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-									Intent intent = new Intent(SeriesActivity.this, SeasonsActivity.class);
+									Intent intent = new Intent(SeriesActivity.this, EpisodesActivity.class);
 									intent.putExtra("seriesPath", series.get(i).getPath());
+									intent.putExtra("seriesSeasons", series.get(i).getSeasonsCount());
 									startActivity(intent);
 								}
 							});
@@ -66,7 +68,7 @@ public class SeriesActivity extends Activity {
 										view = ((LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.series_item, null);
 									} else {
 										view = convertView;
-										view.findViewById(R.id.logo).setVisibility(View.INVISIBLE);
+										view.findViewById(R.id.cover).setVisibility(View.INVISIBLE);
 									}
 
 									Series s = series.get(position);
@@ -79,12 +81,12 @@ public class SeriesActivity extends Activity {
 
 									drawableCache.request(s.getMediumLogoUrl(), new FutureData<Drawable>() {
 										@Override
-										public void done(final Drawable logo) {
+										public void done(final Drawable drawable) {
 											runOnUiThread(new Runnable() {
 												@Override
 												public void run() {
-													((ImageView) view.findViewById(R.id.logo)).setImageDrawable(logo);
-													view.findViewById(R.id.logo).setVisibility(View.VISIBLE);
+													((ImageView) view.findViewById(R.id.cover)).setImageDrawable(drawable);
+													view.findViewById(R.id.cover).setVisibility(View.VISIBLE);
 												}
 											});
 										}
