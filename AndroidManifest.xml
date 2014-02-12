@@ -1,39 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.gigahub.turbofilm"
-	android:versionCode="1"
-	android:versionName="1.0.0-SNAPSHOT">
+		  package="org.gigahub.turbofilm"
+		  android:versionCode="1"
+		  android:versionName="1.0.0-SNAPSHOT">
 
 	<uses-sdk
 		android:minSdkVersion="14"
-		android:targetSdkVersion="19" />
+		android:targetSdkVersion="19"/>
 
-	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.INTERNET"/>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
 	<application
 		android:label="@string/app_name"
 		android:name=".TurboApplication"
-		android:allowBackup="true">
+		android:allowBackup="true"
+		android:theme="@style/TurboApp">
 
 		<activity
-			android:name=".screens.SplashActivity"
-			android:windowSoftInputMode="stateHidden">
+			android:name=".screens.AuthActivity"/>
+
+		<activity
+			android:name=".screens.home.HomeActivity">
 
 			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
+				<action android:name="android.intent.action.MAIN"/>
+				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 
 		</activity>
 
 		<activity
-			android:name=".screens.AuthActivity" />
+			android:name=".screens.season.SeasonActivity"
+			android:parentActivityName=".screens.home.HomeActivity"/>
 
 		<activity
-			android:name=".screens.home.HomeActivity" />
-		<activity android:name=".screens.season.SeasonActivity" />
-		<activity android:name=".screens.episode.EpisodeActivity" />
+			android:name=".screens.episode.EpisodeActivity"
+			android:parentActivityName=".screens.season.SeasonActivity"/>
 
 	</application>
 

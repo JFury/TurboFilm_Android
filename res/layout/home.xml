@@ -8,6 +8,11 @@
 	<GridView
 		android:id="@+id/grid"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"/>
+		android:layout_height="match_parent"
+		android:padding="@dimen/offset_big"
+		android:verticalSpacing="@dimen/offset_big"
+		android:horizontalSpacing="@dimen/offset_big"
+		android:numColumns="auto_fit"
+		android:columnWidth="250dp"/>
 
 </LinearLayout>

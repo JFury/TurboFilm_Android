@@ -52,7 +52,7 @@ public class HomeActivity extends RoboActivity {
 
 
 		final DisplayImageOptions options = new DisplayImageOptions.Builder()
-				.showStubImage(R.drawable.icon_movie)
+				.showImageOnLoading(R.drawable.icon_movie)
 				.cacheInMemory(true)
 				.cacheOnDisc(true)
 				.displayer(new FadeInBitmapDisplayer(300))
@@ -67,9 +67,8 @@ public class HomeActivity extends RoboActivity {
 
 				BasicSeries series = getItem(position);
 
-				if (view == null) {
+				if (view == null)
 					view = getLayoutInflater().inflate(R.layout.home_series_item, parent, false);
-				}
 
 				final ImageView imageView = (ImageView) view.findViewById(R.id.logo);
 
@@ -103,13 +102,6 @@ public class HomeActivity extends RoboActivity {
 		});
 
 		gridView.setOnScrollListener(new PauseOnScrollListener(imageLoader, true, true));
-
-		gridView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-			@Override
-			public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-				gridView.setNumColumns(Math.max(v.getMeasuredWidth() / 600, 1));
-			}
-		});
 
 		loadData();
 	}

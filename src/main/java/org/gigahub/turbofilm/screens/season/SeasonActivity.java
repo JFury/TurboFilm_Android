@@ -51,6 +51,8 @@ public class SeasonActivity extends RoboActivity implements SeasonNumberDialog.S
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		getActionBar().setTitle(nameEn);
+
 		ImageLoader.getInstance().displayImage(Images.seriesBigPoster(id), poster);
 
 		nameEnText.setText(nameEn);
@@ -87,13 +89,6 @@ public class SeasonActivity extends RoboActivity implements SeasonNumberDialog.S
 				series.setNameEn(nameEn);
 				series.setNameRu(nameRu);
 				startActivity(new EpisodeIntent(SeasonActivity.this, series, adapter.getItem(position)));
-			}
-		});
-
-		episodesGrid.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-			@Override
-			public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-				episodesGrid.setNumColumns(Math.max(1, v.getMeasuredWidth() / 400));
 			}
 		});
 

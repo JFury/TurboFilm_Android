@@ -3,7 +3,9 @@ package org.gigahub.turbofilm.screens.episode;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.MediaController;
 import android.widget.VideoView;
+
 import org.gigahub.turbofilm.R;
 import org.gigahub.turbofilm.client.NotLoggedInException;
 import org.gigahub.turbofilm.client.ParseException;
@@ -12,12 +14,14 @@ import org.gigahub.turbofilm.client.Video;
 import org.gigahub.turbofilm.client.container.EpisodePage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectView;
 
 import javax.inject.Inject;
+
 import java.io.IOException;
 
 /**
@@ -32,6 +36,7 @@ public class EpisodeActivity extends RoboActivity {
 	@InjectView(R.id.video) VideoView video;
 
 	@InjectExtra(EpisodeIntent.ALIAS) String alias;
+	@InjectExtra(EpisodeIntent.EPISODE_NAME_EN) String nameEn;
 	@InjectExtra(EpisodeIntent.SEASON) int season;
 	@InjectExtra(EpisodeIntent.EPISODE) int episode;
 
@@ -40,17 +45,22 @@ public class EpisodeActivity extends RoboActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		getActionBar().setTitle(nameEn);
+
+		((VideoControls) getFragmentManager().findFragmentById(R.id.controls)).setVideo(video);
+
 		loadData();
 	}
 
 	private void loadData() {
-		new AsyncTask<Void, Void, EpisodePage>(){
+		new AsyncTask<Void, Void, EpisodePage>() {
 
 			@Override
 			protected EpisodePage doInBackground(Void... params) {
 
 				try {
-					return client.getEpisode(alias, season, episode);
+					EpisodePage episodePage = client.getEpisode(alias, season, episode);
+					return episodePage;
 
 				} catch (NotLoggedInException e) {
 					e.printStackTrace();
@@ -73,7 +83,7 @@ public class EpisodeActivity extends RoboActivity {
 				String url = Video.generateUrl(episodePage.getMetaData(), hash, "ru", false, 0);
 				L.trace("URL: " + url);
 				video.setVideoURI(Uri.parse(url));
-				video.start();
+
 			}
 
 		}.execute();
