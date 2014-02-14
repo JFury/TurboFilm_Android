@@ -5,28 +5,37 @@
 			  android:layout_width="match_parent"
 			  android:layout_height="wrap_content"
 			  android:gravity="center_vertical"
-	android:background="#77000000">
+			  android:background="@color/semi_transparent">
 
-		<ImageButton
-			android:id="@+id/play"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:padding="@dimen/offset_big"
-			android:src="@drawable/ic_action_play"
-			android:background="@null"/>
+	<ImageButton
+		android:id="@+id/play"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:padding="@dimen/offset_big"
+		android:src="@drawable/ic_action_play"
+		android:background="@null"/>
 
-		<SeekBar
-			android:id="@+id/seekBar"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"/>
+	<TextView
+		android:id="@+id/pastTime"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:paddingLeft="@dimen/offset_normal"
+		android:paddingRight="@dimen/offset_normal"
+		android:gravity="center_vertical"
+		/>
 
-		<ImageButton
-			android:id="@+id/fullscreen"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:src="@drawable/ic_action_full_screen"
-			android:background="@null"
-			android:padding="@dimen/offset_big"/>
+	<SeekBar
+		android:id="@+id/seekBar"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"/>
+
+	<TextView
+		android:id="@+id/remainTime"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:paddingLeft="@dimen/offset_normal"
+		android:paddingRight="@dimen/offset_normal"
+		android:gravity="center_vertical"/>
 
 </LinearLayout>

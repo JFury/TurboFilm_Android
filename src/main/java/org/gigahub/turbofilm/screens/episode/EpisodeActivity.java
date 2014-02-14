@@ -3,6 +3,8 @@ package org.gigahub.turbofilm.screens.episode;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -34,6 +36,7 @@ public class EpisodeActivity extends RoboActivity {
 	private static final Logger L = LoggerFactory.getLogger(EpisodeActivity.class.getSimpleName());
 
 	@InjectView(R.id.video) VideoView video;
+	@InjectView(R.id.loading) View loading;
 
 	@InjectExtra(EpisodeIntent.ALIAS) String alias;
 	@InjectExtra(EpisodeIntent.EPISODE_NAME_EN) String nameEn;
@@ -46,6 +49,10 @@ public class EpisodeActivity extends RoboActivity {
 		super.onCreate(savedInstanceState);
 
 		getActionBar().setTitle(nameEn);
+
+		getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.semi_transparent));
+
+		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
 		((VideoControls) getFragmentManager().findFragmentById(R.id.controls)).setVideo(video);
 
@@ -87,6 +94,30 @@ public class EpisodeActivity extends RoboActivity {
 			}
 
 		}.execute();
+	}
+
+	public void videoPrepared(int width, int height) {
+
+		loading.setVisibility(View.GONE);
+
+		View root = findViewById(android.R.id.content);
+
+		double rootAspect = (double) root.getWidth() / root.getHeight();
+		double videoAspect = (double) width / height;
+
+		ViewGroup.LayoutParams params = video.getLayoutParams();
+
+		if (rootAspect < videoAspect) {
+			params.width = (int) (root.getHeight() * videoAspect);
+			params.height = root.getHeight();
+		} else {
+			params.width = root.getWidth();
+			params.height = (int) (root.getWidth() / videoAspect);
+		}
+
+		video.setLayoutParams(params);
+
+		video.requestLayout();
 	}
 
 }

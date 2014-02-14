@@ -11,14 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import org.gigahub.turbofilm.R;
+import org.gigahub.turbofilm.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -31,22 +31,22 @@ public class VideoControls extends Fragment {
 	private static final Logger L = LoggerFactory.getLogger(VideoControls.class.getSimpleName());
 
 	private VideoView video;
-
 	private SeekBar seekBar;
+	private TextView pastTime;
+	private TextView remainTime;
 	private ImageButton playButton;
-	private ImageButton fullscreenButton;
 
 	private Drawable playIcon;
 	private Drawable pauseIcon;
-	private boolean isFullscreen;
-	private Timer timer;
 	private ScheduledExecutorService executor;
+
 	private boolean isSeeking;
+	private boolean isPlaying;
+	private boolean isRemainShow;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		playIcon = getResources().getDrawable(R.drawable.ic_action_play);
 		pauseIcon = getResources().getDrawable(R.drawable.ic_action_pause);
 	}
@@ -56,8 +56,9 @@ public class VideoControls extends Fragment {
 		View v = inflater.inflate(R.layout.video_controls, container);
 
 		seekBar = (SeekBar) v.findViewById(R.id.seekBar);
+		pastTime = (TextView) v.findViewById(R.id.pastTime);
+		remainTime = (TextView) v.findViewById(R.id.remainTime);
 		playButton = (ImageButton) v.findViewById(R.id.play);
-		fullscreenButton = (ImageButton) v.findViewById(R.id.fullscreen);
 
 		return v;
 	}
@@ -66,16 +67,30 @@ public class VideoControls extends Fragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
+		int bottom = getResources().getDimensionPixelSize(getResources().getIdentifier("navigation_bar_height", "dimen", "android"));
+		getView().setPadding(0, 0, 0, bottom);
+
+		getView().setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+			}
+		});
+
 		playButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (video != null) {
-					if (video.isPlaying()) video.pause();
-					else video.start();
 
-					playButton.setImageDrawable(video.isPlaying() ? pauseIcon : playIcon);
+					isPlaying = !isPlaying;
+
+					if (isPlaying) {
+						video.start();
+					} else {
+						video.pause();
+					}
+
+					playButton.setImageDrawable(isPlaying ? pauseIcon : playIcon);
 				}
-				resetTimer();
 			}
 		});
 
@@ -86,48 +101,38 @@ public class VideoControls extends Fragment {
 
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
-				resetTimer();
 				isSeeking = true;
 			}
 
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				if (video != null) video.seekTo(seekBar.getProgress());
-				resetTimer();
 				isSeeking = false;
 			}
 		});
 
-		fullscreenButton.setOnClickListener(new View.OnClickListener() {
+		remainTime.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
-				isFullscreen = !isFullscreen;
-
-				int i = View.SYSTEM_UI_FLAG_LOW_PROFILE | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-				getActivity().getWindow().getDecorView().setSystemUiVisibility(isFullscreen ? i : 0);
-
-				if (isFullscreen) getActivity().getActionBar().hide();
-				else getActivity().getActionBar().show();
-
-				resetTimer();
+				isRemainShow = !isRemainShow;
 			}
 		});
 
 		getActivity().getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
 			@Override
 			public void onSystemUiVisibilityChange(int i) {
-
-				if ((i & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+				if ((i & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0 || (i & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+					getView().setVisibility(View.VISIBLE);
 					getActivity().getActionBar().show();
 				} else {
+					getView().setVisibility(View.INVISIBLE);
 					getActivity().getActionBar().hide();
 				}
-
-				resetTimer();
-
 			}
 		});
+
+		pastTime.setText(Utils.convertTime(0));
+		remainTime.setText("-" + Utils.convertTime(0));
 	}
 
 	@Override
@@ -138,60 +143,72 @@ public class VideoControls extends Fragment {
 		executor.scheduleWithFixedDelay(new Runnable() {
 			@Override
 			public void run() {
-				if (video != null && !isSeeking) seekBar.setProgress(video.getCurrentPosition());
+
+				if (video != null && !isSeeking) {
+					final int position = video.getCurrentPosition();
+
+					getActivity().runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+
+							int duration = video.getDuration();
+
+							seekBar.setMax(duration);
+							seekBar.setProgress(position);
+
+							pastTime.setText(Utils.convertTime(position));
+
+							if (duration > 0) {
+
+								if (isRemainShow)
+									remainTime.setText(Utils.convertTime(position - duration));
+								else
+									remainTime.setText(Utils.convertTime(duration));
+							}
+						}
+					});
+
+				}
+
 			}
-		}, 0, 500, TimeUnit.MILLISECONDS);
+		}, 0, 250, TimeUnit.MILLISECONDS);
+
 	}
 
 	@Override
 	public void onDetach() {
 		super.onDetach();
-
 		if (executor != null) {
 			executor.shutdown();
 			executor = null;
 		}
 	}
 
-	private void resetTimer() {
-
-		L.trace("Reset timer");
-
-		getView().setVisibility(View.VISIBLE);
-
-		if (timer != null) {
-			timer.cancel();
-		}
-
-		timer = new Timer();
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				if (video.isPlaying()) getActivity().runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						getView().setVisibility(View.INVISIBLE);
-					}
-				});
-			}
-		}, 3000);
-
-	}
-
 	public void setVideo(VideoView video) {
+
 		this.video = video;
 
 		video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 			@Override
 			public void onPrepared(MediaPlayer mp) {
-				seekBar.setMax(mp.getDuration());
+
+				((EpisodeActivity) getActivity()).videoPrepared(mp.getVideoWidth(), mp.getVideoHeight());
+
 			}
 		});
 
 		video.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View view, MotionEvent motionEvent) {
-				resetTimer();
+
+				int i = getActivity().getWindow().getDecorView().getSystemUiVisibility();
+
+				if ((View.SYSTEM_UI_FLAG_FULLSCREEN & i) == 0 || (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION & i) == 0) {
+
+					getActivity().getWindow().getDecorView().setSystemUiVisibility(i | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+				}
+
 				return true;
 			}
 		});

@@ -9,5 +9,6 @@
 
 	<dimen name="text_big">14pt</dimen>
 	<dimen name="column_width">300dp</dimen>
+	<dimen name="progress">36dp</dimen>
 
 </resources>
