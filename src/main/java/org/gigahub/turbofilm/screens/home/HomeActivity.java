@@ -1,58 +1,48 @@
 package org.gigahub.turbofilm.screens.home;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import com.actionbarsherlock.app.SherlockActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import org.androidannotations.annotations.*;
 import org.gigahub.turbofilm.R;
-import org.gigahub.turbofilm.screens.AuthActivity;
-import org.gigahub.turbofilm.screens.season.SeasonIntent;
-import org.gigahub.turbofilm.client.Images;
 import org.gigahub.turbofilm.client.NotLoggedInException;
 import org.gigahub.turbofilm.client.ParseException;
 import org.gigahub.turbofilm.client.TurboFilmClient;
 import org.gigahub.turbofilm.client.container.HomePage;
 import org.gigahub.turbofilm.client.model.BasicSeries;
+import org.gigahub.turbofilm.screens.AuthActivity_;
+import org.gigahub.turbofilm.screens.season.SeasonActivity_;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import roboguice.activity.RoboActivity;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
 
-import javax.inject.Inject;
 import java.io.IOException;
 
 /**
  * @author Pavel Savinov aka swap_i
  * @since 1.0.0
  */
-@ContentView(R.layout.home)
-public class HomeActivity extends RoboActivity {
+@EActivity(R.layout.home)
+public class HomeActivity extends SherlockActivity {
 
 	private static final Logger L = LoggerFactory.getLogger(HomeActivity.class.getSimpleName());
 	private static final int AUTH_REQUEST = 0;
 
-	@InjectView(R.id.grid) GridView gridView;
+	@ViewById GridView grid;
 
-	@Inject TurboFilmClient client;
+	@Bean TurboFilmClient client;
 
 	private ArrayAdapter<BasicSeries> adapter;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
+	@AfterViews
+	void afterViews() {
 
 		final DisplayImageOptions options = new DisplayImageOptions.Builder()
-				.showImageOnLoading(R.drawable.icon_movie)
+				.showStubImage(R.drawable.icon_movie)
 				.cacheInMemory(true)
 				.cacheOnDisc(true)
 				.displayer(new FadeInBitmapDisplayer(300))
@@ -61,105 +51,59 @@ public class HomeActivity extends RoboActivity {
 
 		final ImageLoader imageLoader = ImageLoader.getInstance();
 
-		adapter = new ArrayAdapter<BasicSeries>(this, 0) {
-			@Override
-			public View getView(int position, View view, ViewGroup parent) {
+		adapter = new BasicSeriesArrayAdapter(this, imageLoader, options);
 
-				BasicSeries series = getItem(position);
+		grid.setAdapter(adapter);
 
-				if (view == null)
-					view = getLayoutInflater().inflate(R.layout.home_series_item, parent, false);
-
-				final ImageView imageView = (ImageView) view.findViewById(R.id.logo);
-
-				imageLoader.displayImage(Images.seriesBigPoster(series.getId()), imageView, options, new SimpleImageLoadingListener(){
-					@Override
-					public void onLoadingStarted(String imageUri, View view) {
-						imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-					}
-
-					@Override
-					public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-						imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-					}
-				});
-
-				((TextView) view.findViewById(R.id.nameEnText)).setText(series.getNameEn());
-				((TextView) view.findViewById(R.id.nameRuText)).setText(series.getNameRu());
-
-				return view;
-			}
-		};
-
-		gridView.setAdapter(adapter);
-
-		gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				BasicSeries series = adapter.getItem(position);
-				startActivity(new SeasonIntent(HomeActivity.this, series));
-			}
-		});
-
-		gridView.setOnScrollListener(new PauseOnScrollListener(imageLoader, true, true));
+		grid.setOnScrollListener(new PauseOnScrollListener(imageLoader, true, true));
 
 		loadData();
 	}
 
-	private void loadData() {
+	@ItemClick
+	void gridItemClicked(int position) {
+		BasicSeries series = adapter.getItem(position);
+		SeasonActivity_.intent(this).alias(series.getAlias()).start();
+	}
 
-		new AsyncTask<Void, Void, HomePage>() {
-			@Override
-			protected HomePage doInBackground(Void... params) {
+	@Background
+	void loadData() {
 
-				HomePage homePage = null;
+		try {
 
-				try {
+			HomePage homePage = client.getHome();
 
-					homePage = client.getHome();
+			updateAdapter(homePage);
 
-				} catch (NotLoggedInException e) {
+		} catch (NotLoggedInException e) {
 
-					cancel(true);
-					startActivityForResult(new Intent(HomeActivity.this, AuthActivity.class), AUTH_REQUEST);
+			AuthActivity_.intent(HomeActivity.this).startForResult(AUTH_REQUEST);
 
-				} catch (IOException e) {
+		} catch (IOException e) {
 
-					L.error("IO error", e);
-					cancel(true);
+			L.error("IO error", e);
 
-				} catch (ParseException e) {
+		} catch (ParseException e) {
 
-					L.error("Parse error", e);
-					cancel(true);
+			L.error("Parse error", e);
 
-				}
-
-				return homePage;
-			}
-
-			@Override
-			protected void onPostExecute(HomePage homePage) {
-				adapter.clear();
-				adapter.addAll(homePage.getTopSeries().getMySeries());
-				adapter.addAll(homePage.getTopSeries().getOtherSeries());
-				adapter.notifyDataSetChanged();
-			}
-
-		}.execute();
+		}
 
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		L.trace("Home resume");
+	@UiThread
+	void updateAdapter(HomePage homePage) {
+		adapter.clear();
+		adapter.addAll(homePage.getTopSeries().getMySeries());
+		adapter.addAll(homePage.getTopSeries().getOtherSeries());
+		adapter.notifyDataSetChanged();
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == AUTH_REQUEST && resultCode == RESULT_OK) {
+	@OnActivityResult(AUTH_REQUEST)
+	void authResult(int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
 			loadData();
 		}
 	}
+
 }

@@ -12,10 +12,9 @@
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1"
-		android:padding="@dimen/offset_big"
-		android:verticalSpacing="@dimen/offset_big"
-		android:horizontalSpacing="@dimen/offset_big"
-		android:numColumns="auto_fit"
-		android:columnWidth="200dp"/>
+		android:padding="@dimen/offset_small"
+		android:columnWidth="200dp"
+		android:numColumns="auto_fit"/>
+
 
 </LinearLayout>

@@ -5,15 +5,16 @@ import android.app.Fragment;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
-
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.ViewById;
 import org.gigahub.turbofilm.R;
 import org.gigahub.turbofilm.Utils;
 import org.slf4j.Logger;
@@ -26,15 +27,17 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by swap_i on 11/02/14.
  */
+@EFragment(R.layout.video_controls)
 public class VideoControls extends Fragment {
 
 	private static final Logger L = LoggerFactory.getLogger(VideoControls.class.getSimpleName());
 
 	private VideoView video;
-	private SeekBar seekBar;
-	private TextView pastTime;
-	private TextView remainTime;
-	private ImageButton playButton;
+
+	@ViewById SeekBar seekBar;
+	@ViewById TextView pastTime;
+	@ViewById TextView remainTime;
+	@ViewById ImageButton playButton;
 
 	private Drawable playIcon;
 	private Drawable pauseIcon;
@@ -51,21 +54,8 @@ public class VideoControls extends Fragment {
 		pauseIcon = getResources().getDrawable(R.drawable.ic_action_pause);
 	}
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.video_controls, container);
-
-		seekBar = (SeekBar) v.findViewById(R.id.seekBar);
-		pastTime = (TextView) v.findViewById(R.id.pastTime);
-		remainTime = (TextView) v.findViewById(R.id.remainTime);
-		playButton = (ImageButton) v.findViewById(R.id.play);
-
-		return v;
-	}
-
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
+	@AfterViews
+	void onViewCreated() {
 
 		int bottom = getResources().getDimensionPixelSize(getResources().getIdentifier("navigation_bar_height", "dimen", "android"));
 		getView().setPadding(0, 0, 0, bottom);
@@ -143,36 +133,29 @@ public class VideoControls extends Fragment {
 		executor.scheduleWithFixedDelay(new Runnable() {
 			@Override
 			public void run() {
-
 				if (video != null && !isSeeking) {
-					final int position = video.getCurrentPosition();
-
-					getActivity().runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-
-							int duration = video.getDuration();
-
-							seekBar.setMax(duration);
-							seekBar.setProgress(position);
-
-							pastTime.setText(Utils.convertTime(position));
-
-							if (duration > 0) {
-
-								if (isRemainShow)
-									remainTime.setText(Utils.convertTime(position - duration));
-								else
-									remainTime.setText(Utils.convertTime(duration));
-							}
-						}
-					});
-
+					update(video.getCurrentPosition());
 				}
-
 			}
 		}, 0, 250, TimeUnit.MILLISECONDS);
+	}
 
+	@UiThread
+	void update(int position) {
+		int duration = video.getDuration();
+
+		seekBar.setMax(duration);
+		seekBar.setProgress(position);
+
+		pastTime.setText(Utils.convertTime(position));
+
+		if (duration > 0) {
+
+			if (isRemainShow)
+				remainTime.setText(Utils.convertTime(position - duration));
+			else
+				remainTime.setText(Utils.convertTime(duration));
+		}
 	}
 
 	@Override

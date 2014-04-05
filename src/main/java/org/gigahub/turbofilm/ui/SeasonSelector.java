@@ -32,7 +32,7 @@ public class SeasonSelector extends TextView {
 
 		setText("-----");
 
-		setTextSize(context.getResources().getDimension(R.dimen.text_big));
+		setTextSize(context.getResources().getDimension(R.dimen.text_size_large));
 
 		setOnClickListener(new OnClickListener() {
 			@Override

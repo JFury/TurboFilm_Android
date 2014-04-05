@@ -20,6 +20,8 @@ public class SeasonPage {
 	 * Описание сериала
 	 */
 	private String seriesDescription;
+	private String seriesNameEn;
+	private String seriesNameRu;
 
 	public int getSeasonsCount() {
 		return seasonsCount;
@@ -53,4 +55,19 @@ public class SeasonPage {
 		return translations;
 	}
 
+	public void setSeriesNameEn(String seriesNameEn) {
+		this.seriesNameEn = seriesNameEn;
+	}
+
+	public String getSeriesNameEn() {
+		return seriesNameEn;
+	}
+
+	public void setSeriesNameRu(String seriesNameRu) {
+		this.seriesNameRu = seriesNameRu;
+	}
+
+	public String getSeriesNameRu() {
+		return seriesNameRu;
+	}
 }

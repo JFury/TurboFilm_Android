@@ -9,12 +9,9 @@
 		android:id="@+id/grid"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:padding="@dimen/offset_big"
-		android:verticalSpacing="@dimen/offset_big"
-		android:horizontalSpacing="@dimen/offset_big"
+		android:columnWidth="250dp"
 		android:scrollbarStyle="outsideOverlay"
-		android:clipToPadding="false"
 		android:numColumns="auto_fit"
-		android:columnWidth="250dp"/>
+		android:padding="@dimen/offset_small"/>
 
 </LinearLayout>

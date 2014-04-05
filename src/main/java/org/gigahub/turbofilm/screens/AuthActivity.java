@@ -1,94 +1,61 @@
 package org.gigahub.turbofilm.screens;
 
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import com.actionbarsherlock.app.SherlockActivity;
+import org.androidannotations.annotations.*;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.gigahub.turbofilm.R;
-import org.gigahub.turbofilm.Settings;
+import org.gigahub.turbofilm.Settings_;
 import org.gigahub.turbofilm.client.NotLoggedInException;
 import org.gigahub.turbofilm.client.TurboFilmClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import roboguice.activity.RoboActivity;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
 
-import javax.inject.Inject;
 import java.io.IOException;
 
 /**
  * @author Pavel Savinov aka swap_i
  * @since 1.0.0
  */
-@ContentView(R.layout.auth)
-public class AuthActivity extends RoboActivity {
+@EActivity(R.layout.auth)
+public class AuthActivity extends SherlockActivity {
 
 	private static final Logger L = LoggerFactory.getLogger(AuthActivity.class.getSimpleName());
 
-	@InjectView(R.id.loginField) EditText loginField;
-	@InjectView(R.id.passwordField) EditText passField;
-	@InjectView(R.id.signinButton) Button signButton;
+	@ViewById EditText loginField;
+	@ViewById EditText passwordField;
+	@ViewById Button signinButton;
 
-	@Inject TurboFilmClient client;
-	@Inject Settings settings;
+	@Bean TurboFilmClient client;
+	@Pref Settings_ settings;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		L.debug("Auth activity create");
-
-		signButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				signin();
-			}
-		});
+	@Click
+	void signinButton() {
+		signin();
 	}
 
-	private void signin() {
-		new AsyncTask<Void, Void, Void>() {
+	@Background
+	void signin() {
 
-			@Override
-			protected Void doInBackground(Void... params) {
+		try {
+			client.singin(loginField.getText().toString(), passwordField.getText().toString());
 
-				try {
-					client.singin(loginField.getText().toString(), passField.getText().toString());
+			client.saveIdCookie(client.getCookie());
 
-				} catch (NotLoggedInException e) {
+			setResult(RESULT_OK);
+			finish();
 
-					e.printStackTrace();
+		} catch (NotLoggedInException e) {
 
-					cancel(true);
+			e.printStackTrace();
 
-				} catch (IOException e) {
+		} catch (IOException e) {
 
-					e.printStackTrace();
+			e.printStackTrace();
 
-					cancel(true);
+		}
 
-				}
-
-				return null;
-			}
-
-			@Override
-			protected void onPostExecute(Void aVoid) {
-
-				settings.saveIdCookie(client.getCookie());
-
-				setResult(RESULT_OK);
-				AuthActivity.this.finish();
-			}
-
-		}.execute();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		L.trace("Auth resume");
 	}
 
 }

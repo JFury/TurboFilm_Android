@@ -17,6 +17,8 @@ public class SeasonPageParser extends Parser {
 	private static final Pattern LAST_SEASON = Pattern.compile("<span class=\".*?\">Сезон ([0-9]*?)</span>");
 	private static final Pattern CURRENT_SEASON = Pattern.compile("<span class=\"seasonnumactive\">Сезон ([0-9]*?)</span>");
 
+	private static final Pattern SERIES_NAME_EN = Pattern.compile("<span class=\"sseriestitleten\">(.*?)</span>");
+	private static final Pattern SERIES_NAME_RU = Pattern.compile("<span class=\"sseriestitleten\">.*?</span> / (.*?)</span>");
 
 	private static final Pattern EPISODES = Pattern.compile("<div class=\"sserieslistbox\">(.*?)</div>", Pattern.DOTALL);
 	private static final Pattern EPISODE = Pattern.compile("<a href(.*?)</a>", Pattern.DOTALL);
@@ -38,6 +40,14 @@ public class SeasonPageParser extends Parser {
 	public SeasonPage parse(String text) throws ParseException {
 
 		SeasonPage seasonPage = new SeasonPage();
+
+		Matcher nameEnMatcher = SERIES_NAME_EN.matcher(text);
+		nameEnMatcher.find();
+		seasonPage.setSeriesNameEn(nameEnMatcher.group(1));
+
+		Matcher nameRuMatcher = SERIES_NAME_RU.matcher(text);
+		nameRuMatcher.find();
+		seasonPage.setSeriesNameRu(nameRuMatcher.group(1));
 
 		parseSeasons(text, seasonPage);
 		parseEpisodes(text, seasonPage);
@@ -71,13 +81,10 @@ public class SeasonPageParser extends Parser {
 
 		String episodesText = matcher.group();
 
-
-
 		Matcher oneEpisodeMatcher = EPISODE.matcher(episodesText);
 		while (oneEpisodeMatcher.find()) {
 			seasonPage.getEpisodes().add(parseOneEpisode(oneEpisodeMatcher.group()));
 		}
-
 
 	}
 

@@ -18,13 +18,13 @@
 
 	<ProgressBar
 		android:id="@+id/loading"
-		android:layout_width="@dimen/progress"
-		android:layout_height="@dimen/progress"
+		android:layout_width="@dimen/row"
+		android:layout_height="@dimen/row"
 		android:layout_gravity="center_vertical|center_horizontal"
 		android:indeterminate="true"/>
 
 	<fragment
-		class="org.gigahub.turbofilm.screens.episode.VideoControls"
+		class="org.gigahub.turbofilm.screens.episode.VideoControls_"
 		android:id="@+id/controls"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
