@@ -11,10 +11,7 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.*;
 import org.gigahub.turbofilm.R;
 import org.gigahub.turbofilm.Utils;
 import org.slf4j.Logger;
@@ -55,7 +52,7 @@ public class VideoControls extends Fragment {
 	}
 
 	@AfterViews
-	void onViewCreated() {
+	void AfterViews() {
 
 		int bottom = getResources().getDimensionPixelSize(getResources().getIdentifier("navigation_bar_height", "dimen", "android"));
 		getView().setPadding(0, 0, 0, bottom);
@@ -63,48 +60,6 @@ public class VideoControls extends Fragment {
 		getView().setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-			}
-		});
-
-		playButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (video != null) {
-
-					isPlaying = !isPlaying;
-
-					if (isPlaying) {
-						video.start();
-					} else {
-						video.pause();
-					}
-
-					playButton.setImageDrawable(isPlaying ? pauseIcon : playIcon);
-				}
-			}
-		});
-
-		seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				isSeeking = true;
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				if (video != null) video.seekTo(seekBar.getProgress());
-				isSeeking = false;
-			}
-		});
-
-		remainTime.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				isRemainShow = !isRemainShow;
 			}
 		});
 
@@ -125,6 +80,22 @@ public class VideoControls extends Fragment {
 		remainTime.setText("-" + Utils.convertTime(0));
 	}
 
+	@Click
+	void remainTime() {
+		isRemainShow = !isRemainShow;
+	}
+
+	@SeekBarTouchStart(R.id.seekBar)
+	void seekStart() {
+		isSeeking = true;
+	}
+
+	@SeekBarTouchStop(R.id.seekBar)
+	void seekStop() {
+		if (video != null) video.seekTo(seekBar.getProgress());
+		isSeeking = false;
+	}
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -138,6 +109,22 @@ public class VideoControls extends Fragment {
 				}
 			}
 		}, 0, 250, TimeUnit.MILLISECONDS);
+	}
+
+	@Click
+	void playButton() {
+		if (video != null) {
+
+			isPlaying = !isPlaying;
+
+			if (isPlaying) {
+				video.start();
+			} else {
+				video.pause();
+			}
+
+			playButton.setImageDrawable(isPlaying ? pauseIcon : playIcon);
+		}
 	}
 
 	@UiThread

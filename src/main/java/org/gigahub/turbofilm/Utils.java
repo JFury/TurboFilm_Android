@@ -5,10 +5,10 @@ package org.gigahub.turbofilm;
  */
 public class Utils {
 
-	public static final String POSITIVE_HOURS_TIME_FORMAT = "%02d:%02d:%02d";
+	public static final String POSITIVE_HOURS_TIME_FORMAT = " %02d:%02d:%02d";
 	public static final String NEGATIVE_HOURS_TIME_FORMAT = "-%02d:%02d:%02d";
 
-	public static final String POSITIVE_TIME_FORMAT = "%02d:%02d";
+	public static final String POSITIVE_TIME_FORMAT = " %02d:%02d";
 	public static final String NEGATIVE_TIME_FORMAT = "-%02d:%02d";
 
 	public static String convertTime(int duration) {

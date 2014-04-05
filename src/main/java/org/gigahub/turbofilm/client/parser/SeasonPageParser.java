@@ -23,7 +23,7 @@ public class SeasonPageParser extends Parser {
 	private static final Pattern EPISODES = Pattern.compile("<div class=\"sserieslistbox\">(.*?)</div>", Pattern.DOTALL);
 	private static final Pattern EPISODE = Pattern.compile("<a href(.*?)</a>", Pattern.DOTALL);
 
-	private static final Pattern POSTER = Pattern.compile("<img src=\"(.*?)\"");
+	private static final Pattern POSTER = Pattern.compile("<img src=\"//img.turbik.tv/.*?/(.*?)a.jpg\"");
 
 	private static final Pattern HQ = Pattern.compile("<span class=\"sserieshq\"></span>");
 	private static final Pattern AUDIO_EN = Pattern.compile("<span class=\"sseriesesound\"></span>");
@@ -94,7 +94,7 @@ public class SeasonPageParser extends Parser {
 		e.setSeason(Integer.parseInt(getString(s, EPISODE_SEASON)));
 		e.setEpisode(Integer.parseInt(getString(s, EPISODE_EPISODE)));
 
-		e.setSmallPosterUrl("http:" + getString(s, POSTER));
+		e.setPosterHash(getString(s, POSTER));
 
 		e.setNameEn(getString(s, NAME_EN));
 		e.setNameRu(getString(s, NAME_RU));

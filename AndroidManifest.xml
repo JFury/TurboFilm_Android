@@ -31,7 +31,9 @@
 			</activity>
 
 		<activity android:name=".screens.season.SeasonActivity_" />
-		<activity android:name=".screens.episode.EpisodeActivity_" />
+
+		<activity android:name=".screens.episode.EpisodeActivity_"
+			android:screenOrientation="landscape"/>
 
 	</application>
 

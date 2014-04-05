@@ -6,7 +6,7 @@ package org.gigahub.turbofilm.client.model;
  */
 public class BasicEpisode {
 
-	private String smallPosterUrl;
+	private String posterHash;
 	private int season;
 	private int episode;
 	private String nameEn;
@@ -17,12 +17,12 @@ public class BasicEpisode {
 	private boolean hasRuSubs;
 	private boolean hasHQ;
 
-	public String getSmallPosterUrl() {
-		return smallPosterUrl;
+	public String getPosterHash() {
+		return posterHash;
 	}
 
-	public void setSmallPosterUrl(String smallPosterUrl) {
-		this.smallPosterUrl = smallPosterUrl;
+	public void setPosterHash(String smallPosterUrl) {
+		this.posterHash = smallPosterUrl;
 	}
 
 	public int getSeason() {

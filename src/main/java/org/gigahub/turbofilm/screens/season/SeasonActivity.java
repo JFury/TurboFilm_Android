@@ -4,9 +4,11 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import org.androidannotations.annotations.*;
+import org.androidannotations.annotations.res.StringRes;
 import org.gigahub.turbofilm.R;
 import org.gigahub.turbofilm.client.Images;
 import org.gigahub.turbofilm.client.NotLoggedInException;
@@ -27,28 +29,42 @@ import java.io.IOException;
 @EActivity(R.layout.season)
 public class SeasonActivity extends SherlockActivity implements SeasonNumberDialog.SeasonListener {
 
-	@ViewById ImageView poster;
-	@ViewById TextView nameEnText;
-	@ViewById TextView nameRuText;
-	@ViewById SeasonSelector seasonSelector;
+	ImageView seriesIcon;
+	TextView nameEnText;
+	TextView nameRuText;
+	SeasonSelector seasonSelector;
+
 	@ViewById GridView grid;
 
 	@Extra int id;
 	@Extra String alias;
+	@Extra int season = 1;
 
 	@Bean TurboFilmClient client;
 
-	private int season = 1;
+	@StringRes(R.string.season_text) String seasonTextRes;
+
 	private ArrayAdapter<BasicEpisode> adapter;
 
 	@AfterViews
 	void afterViews() {
 
-		ImageLoader.getInstance().displayImage(Images.seriesBigPoster(id), poster);
+		ActionBar actionBar = getSupportActionBar();
 
+		actionBar.setCustomView(R.layout.season_bar);
+		actionBar.setDisplayShowCustomEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayShowHomeEnabled(false);
+
+		seriesIcon = ((ImageView) actionBar.getCustomView().findViewById(R.id.seriesIcon));
+		nameEnText = (TextView) actionBar.getCustomView().findViewById(R.id.nameEnText);
+		nameRuText = (TextView) actionBar.getCustomView().findViewById(R.id.nameRuText);
+		seasonSelector = (SeasonSelector) actionBar.getCustomView().findViewById(R.id.seasonText);
+
+		ImageLoader.getInstance().displayImage(Images.seriesSmallSquare(id), seriesIcon);
 		seasonSelector.setSeasonListener(this);
 
-		adapter = new BasicEpisodeArrayAdapter(this);
+		adapter = new BasicEpisodeArrayAdapter(this, alias);
 
 		grid.setAdapter(adapter);
 
@@ -93,6 +109,8 @@ public class SeasonActivity extends SherlockActivity implements SeasonNumberDial
 
 		nameEnText.setText(page.getSeriesNameEn());
 		nameRuText.setText(page.getSeriesNameRu());
+
+		seasonSelector.setSeasonCount(page.getSeasonsCount());
 
 		adapter.clear();
 		adapter.addAll(page.getEpisodes());

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import org.gigahub.turbofilm.R;
+import org.gigahub.turbofilm.client.Images;
 import org.gigahub.turbofilm.client.model.BasicEpisode;
 
 /**
@@ -17,10 +18,12 @@ import org.gigahub.turbofilm.client.model.BasicEpisode;
 class BasicEpisodeArrayAdapter extends ArrayAdapter<BasicEpisode> {
 
 	private SeasonActivity seasonActivity;
+	private String seriesAlias;
 
-	public BasicEpisodeArrayAdapter(SeasonActivity seasonActivity) {
+	public BasicEpisodeArrayAdapter(SeasonActivity seasonActivity, String seriesAlias) {
 		super(seasonActivity, 0);
 		this.seasonActivity = seasonActivity;
+		this.seriesAlias = seriesAlias;
 	}
 
 	@Override
@@ -30,7 +33,7 @@ class BasicEpisodeArrayAdapter extends ArrayAdapter<BasicEpisode> {
 
 		if (v == null) v = seasonActivity.getLayoutInflater().inflate(R.layout.season_episode, parent, false);
 
-		ImageLoader.getInstance().displayImage(e.getSmallPosterUrl(), (ImageView) v.findViewById(R.id.frameImage));
+		ImageLoader.getInstance().displayImage(Images.episodePosterBig(seriesAlias, e.getPosterHash()), (ImageView) v.findViewById(R.id.frameImage));
 
 		((TextView) v.findViewById(R.id.nameEnText)).setText(Html.fromHtml(e.getNameEn()));
 		((TextView) v.findViewById(R.id.nameRuText)).setText(Html.fromHtml(e.getNameRu()));

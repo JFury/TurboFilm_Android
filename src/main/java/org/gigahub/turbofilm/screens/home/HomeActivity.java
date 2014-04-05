@@ -63,7 +63,10 @@ public class HomeActivity extends SherlockActivity {
 	@ItemClick
 	void gridItemClicked(int position) {
 		BasicSeries series = adapter.getItem(position);
-		SeasonActivity_.intent(this).alias(series.getAlias()).start();
+		SeasonActivity_.intent(this)
+				.id(series.getId())
+				.alias(series.getAlias())
+				.start();
 	}
 
 	@Background
@@ -77,7 +80,7 @@ public class HomeActivity extends SherlockActivity {
 
 		} catch (NotLoggedInException e) {
 
-			AuthActivity_.intent(HomeActivity.this).startForResult(AUTH_REQUEST);
+			AuthActivity_.intent(this).startForResult(AUTH_REQUEST);
 
 		} catch (IOException e) {
 
