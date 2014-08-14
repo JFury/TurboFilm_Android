@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<style name="TurboFilm" parent="Sherlock.__Theme">
+		<item name="android:windowBackground">@android:color/black</item>
+	</style>
+
+	<style name="TextShadow">
+		<item name="android:shadowColor">@android:color/black</item>
+		<item name="android:shadowDx">2</item>
+		<item name="android:shadowDy">2</item>
+		<item name="android:shadowRadius">2</item>
+	</style>
+
+</resources>
