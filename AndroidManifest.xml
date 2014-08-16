@@ -17,7 +17,9 @@
 		android:theme="@style/TurboFilm"
 		android:allowBackup="true">
 
-		<activity android:name=".screens.AuthActivity_" />
+		<activity
+			android:name=".screens.AuthActivity_"
+			android:windowSoftInputMode="adjustResize" />
 
 		<activity android:name=".screens.home.HomeActivity_">
 

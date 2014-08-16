@@ -5,12 +5,12 @@ import android.widget.EditText;
 import com.actionbarsherlock.app.SherlockActivity;
 import org.androidannotations.annotations.*;
 import org.androidannotations.annotations.sharedpreferences.Pref;
-import org.gigahub.turbofilm.R;
-import org.gigahub.turbofilm.Settings_;
-import tv.turbik.client.NotLoggedInException;
-import tv.turbik.client.TurboFilmClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tv.turbik.R;
+import tv.turbik.Settings_;
+import tv.turbik.client.NotLoggedInException;
+import tv.turbik.client.TurboFilmClient;
 
 import java.io.IOException;
 

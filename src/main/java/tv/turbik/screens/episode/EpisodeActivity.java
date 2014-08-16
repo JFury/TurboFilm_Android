@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.widget.VideoView;
 import com.actionbarsherlock.app.SherlockActivity;
 import org.androidannotations.annotations.*;
-import org.gigahub.turbofilm.R;
+import tv.turbik.R;
 import tv.turbik.client.NotLoggedInException;
 import tv.turbik.client.ParseException;
 import tv.turbik.client.TurboFilmClient;

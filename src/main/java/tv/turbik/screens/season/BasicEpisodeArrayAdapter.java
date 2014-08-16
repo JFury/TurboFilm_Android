@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import org.gigahub.turbofilm.R;
+import tv.turbik.R;
 import tv.turbik.client.model.BasicEpisode;
 
 /**

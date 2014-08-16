@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import org.gigahub.turbofilm.R;
+import tv.turbik.R;
 
 /**
  * @author Pavel Savinov

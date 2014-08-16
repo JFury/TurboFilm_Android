@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.ImageView;
-import org.gigahub.turbofilm.R;
+import tv.turbik.R;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

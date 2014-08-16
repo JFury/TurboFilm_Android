@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import org.androidannotations.annotations.*;
-import org.gigahub.turbofilm.R;
+import tv.turbik.R;
 import tv.turbik.client.Images;
 import tv.turbik.client.NotLoggedInException;
 import tv.turbik.client.ParseException;

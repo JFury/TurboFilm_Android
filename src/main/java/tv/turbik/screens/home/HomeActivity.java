@@ -9,7 +9,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import org.androidannotations.annotations.*;
-import org.gigahub.turbofilm.R;
+import tv.turbik.R;
 import tv.turbik.client.NotLoggedInException;
 import tv.turbik.client.ParseException;
 import tv.turbik.client.TurboFilmClient;

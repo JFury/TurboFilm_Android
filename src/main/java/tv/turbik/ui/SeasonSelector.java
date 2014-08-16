@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
-import org.gigahub.turbofilm.R;
+import tv.turbik.R;
 
 /**
  * @author Pavel Savinov
