@@ -9,14 +9,15 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import org.androidannotations.annotations.*;
 import tv.turbik.R;
 import tv.turbik.client.Images;
-import tv.turbik.client.TurbikClient;
-import tv.turbik.client.container.SeasonPage;
 import tv.turbik.client.exception.TurboException;
-import tv.turbik.client.exception.server.NotLoggedInException;
-import tv.turbik.client.model.BasicEpisode;
+import tv.turbik.client.smart.SmartClient;
+import tv.turbik.dao.Episode;
+import tv.turbik.dao.Series;
 import tv.turbik.screens.episode.EpisodeActivity_;
 import tv.turbik.ui.SeasonNumberDialog;
 import tv.turbik.ui.SeasonSelector;
+
+import java.util.List;
 
 /**
  * @author Pavel Savinov [swapii@gmail.com]
@@ -31,33 +32,43 @@ public class SeasonActivity extends SherlockActivity implements SeasonNumberDial
 	@ViewById SeasonSelector seasonSelector;
 	@ViewById GridView grid;
 
-	@Extra int id;
-	@Extra String alias;
+	@Extra long id;
+	@Extra int season = 1;
 
-	@Bean TurbikClient client;
+	@Bean SmartClient client;
 
-	private int season = 1;
-	private ArrayAdapter<BasicEpisode> adapter;
+	private ArrayAdapter<Episode> adapter;
 
 	@AfterViews
 	void afterViews() {
 
+		seasonSelector.setSeasonListener(new SeasonNumberDialog.SeasonListener() {
+			@Override
+			public void seasonSelected(int season) {
+				SeasonActivity_.intent(SeasonActivity.this)
+						.id(id)
+						.season(season)
+						.start();
+			}
+		});
+
 		ImageLoader.getInstance().displayImage(Images.seriesBigPoster(id), poster);
 
-		seasonSelector.setSeasonListener(this);
-
-		adapter = new BasicEpisodeArrayAdapter(this);
-
+		adapter = new EpisodeAdapter(this);
 		grid.setAdapter(adapter);
+
+		Series series = client.getSeries(id);
+		nameEnText.setText(series.getNameEn());
+		nameRuText.setText(series.getNameRu());
 
 		loadData();
 	}
 
 	@ItemClick
 	void gridItemClicked(int position) {
-		BasicEpisode episode = adapter.getItem(position);
+		Episode episode = adapter.getItem(position);
 		EpisodeActivity_.intent(this)
-				.alias(alias)
+				//.alias(alias)
 				.season(season)
 				.episode(episode.getEpisode())
 				.start();
@@ -73,11 +84,9 @@ public class SeasonActivity extends SherlockActivity implements SeasonNumberDial
 	void loadData() {
 
 		try {
-			SeasonPage seasonPage = client.getSeasonPage(alias, season);
-			update(seasonPage);
+			List<Episode> episodeList = client.getEpisodes(id, season);
+			update(episodeList);
 
-		} catch (NotLoggedInException e) {
-			e.printStackTrace();
 		} catch (TurboException e) {
 			e.printStackTrace();
 		}
@@ -85,13 +94,9 @@ public class SeasonActivity extends SherlockActivity implements SeasonNumberDial
 	}
 
 	@UiThread
-	void update(SeasonPage page) {
-
-		nameEnText.setText(page.getSeriesNameEn());
-		nameRuText.setText(page.getSeriesNameRu());
-
+	void update(List<Episode> episodeList) {
 		adapter.clear();
-		adapter.addAll(page.getEpisodes());
+		adapter.addAll(episodeList);
 		adapter.notifyDataSetChanged();
 	}
 

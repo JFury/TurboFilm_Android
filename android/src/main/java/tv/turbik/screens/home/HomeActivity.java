@@ -49,7 +49,7 @@ public class HomeActivity extends SherlockActivity {
 
 		final ImageLoader imageLoader = ImageLoader.getInstance();
 
-		adapter = new BasicSeriesArrayAdapter(this, imageLoader, options);
+		adapter = new SeriesAdapter(this, imageLoader, options);
 
 		grid.setAdapter(adapter);
 
@@ -61,7 +61,9 @@ public class HomeActivity extends SherlockActivity {
 	@ItemClick
 	void gridItemClicked(int position) {
 		Series series = adapter.getItem(position);
-		SeasonActivity_.intent(this).alias(series.getAlias()).start();
+		SeasonActivity_.intent(this)
+				.id(series.getId())
+				.start();
 	}
 
 	@Background
@@ -69,7 +71,7 @@ public class HomeActivity extends SherlockActivity {
 
 		try {
 
-			List<Series> series = client.getSeries();
+			List<Series> series = client.getAllSeries();
 
 			updateAdapter(series);
 

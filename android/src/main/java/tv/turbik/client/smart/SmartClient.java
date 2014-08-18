@@ -4,8 +4,11 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
 import tv.turbik.client.TurbikClient;
 import tv.turbik.client.container.HomePage;
+import tv.turbik.client.container.SeasonPage;
 import tv.turbik.client.exception.TurboException;
+import tv.turbik.client.model.BasicEpisode;
 import tv.turbik.client.model.BasicSeries;
+import tv.turbik.dao.Episode;
 import tv.turbik.dao.Series;
 
 import java.util.ArrayList;
@@ -20,7 +23,7 @@ public class SmartClient {
 
 	@Bean TurbikClient turbikClient;
 
-	public List<Series> getSeries() throws TurboException{
+	public List<Series> getAllSeries() throws TurboException{
 
 		HomePage homePage = turbikClient.getHomePage();
 
@@ -45,6 +48,31 @@ public class SmartClient {
 		}
 
 		return seriesList;
+	}
+
+	public Series getSeries(long id) {
+		return null;
+	}
+
+	public List<Episode> getEpisodes(long seriesId, int season) throws TurboException {
+
+		Series series = getSeries(seriesId);
+
+		SeasonPage seasonPage = turbikClient.getSeasonPage(series.getAlias(), season);
+
+		ArrayList<Episode> episodes = new ArrayList<Episode>();
+		for (BasicEpisode basicEpisode : seasonPage.getEpisodes()) {
+			Episode episode = new Episode();
+			episode.setSeriesId(seriesId);
+			episode.setSeason((byte) season);
+			episode.setEpisode((byte) basicEpisode.getEpisode());
+			episode.setNameEn(basicEpisode.getNameEn());
+			episode.setNameRu(basicEpisode.getNameRu());
+			episode.setSmallPosterUrl(basicEpisode.getSmallPosterUrl());
+			episodes.add(episode);
+		}
+
+		return episodes;
 	}
 
 }

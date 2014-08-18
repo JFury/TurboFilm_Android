@@ -14,7 +14,7 @@ import tv.turbik.client.TurbikClient;
  * @since 1.0.0
  */
 @EApplication
-public class Turbik extends Application {
+public class TurboApp extends Application {
 
 	@Bean TurbikClient client;
 

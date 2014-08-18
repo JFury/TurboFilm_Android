@@ -26,10 +26,11 @@ public class DaoTurboGenerator {
 
 		Entity episode = schema.addEntity("Episode");
 		episode.addIdProperty();
-		episode.addByteProperty("season");
-		episode.addByteProperty("episode");
-		episode.addStringProperty("nameEn");
+		episode.addByteProperty("season").notNull();
+		episode.addByteProperty("episode").notNull();
+		episode.addStringProperty("nameEn").notNull();
 		episode.addStringProperty("nameRu");
+		episode.addStringProperty("smallPosterUrl");
 		Property.PropertyBuilder episodeSeriesId = episode.addLongProperty("seriesId");
 
 		series.addToMany(episode, episodeSeriesId.getProperty());

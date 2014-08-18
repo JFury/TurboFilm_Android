@@ -27,11 +27,12 @@ public class EpisodeDao extends AbstractDao<Episode, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Season = new Property(1, Byte.class, "season", false, "SEASON");
-        public final static Property Episode = new Property(2, Byte.class, "episode", false, "EPISODE");
+        public final static Property Season = new Property(1, byte.class, "season", false, "SEASON");
+        public final static Property Episode = new Property(2, byte.class, "episode", false, "EPISODE");
         public final static Property NameEn = new Property(3, String.class, "nameEn", false, "NAME_EN");
         public final static Property NameRu = new Property(4, String.class, "nameRu", false, "NAME_RU");
-        public final static Property SeriesId = new Property(5, Long.class, "seriesId", false, "SERIES_ID");
+        public final static Property SmallPosterUrl = new Property(5, String.class, "smallPosterUrl", false, "SMALL_POSTER_URL");
+        public final static Property SeriesId = new Property(6, Long.class, "seriesId", false, "SERIES_ID");
     };
 
     private DaoSession daoSession;
@@ -52,11 +53,12 @@ public class EpisodeDao extends AbstractDao<Episode, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'EPISODE' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'SEASON' INTEGER," + // 1: season
-                "'EPISODE' INTEGER," + // 2: episode
-                "'NAME_EN' TEXT," + // 3: nameEn
+                "'SEASON' INTEGER NOT NULL ," + // 1: season
+                "'EPISODE' INTEGER NOT NULL ," + // 2: episode
+                "'NAME_EN' TEXT NOT NULL ," + // 3: nameEn
                 "'NAME_RU' TEXT," + // 4: nameRu
-                "'SERIES_ID' INTEGER);"); // 5: seriesId
+                "'SMALL_POSTER_URL' TEXT," + // 5: smallPosterUrl
+                "'SERIES_ID' INTEGER);"); // 6: seriesId
     }
 
     /** Drops the underlying database table. */
@@ -74,30 +76,23 @@ public class EpisodeDao extends AbstractDao<Episode, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
- 
-        Byte season = entity.getSeason();
-        if (season != null) {
-            stmt.bindLong(2, season);
-        }
- 
-        Byte episode = entity.getEpisode();
-        if (episode != null) {
-            stmt.bindLong(3, episode);
-        }
- 
-        String nameEn = entity.getNameEn();
-        if (nameEn != null) {
-            stmt.bindString(4, nameEn);
-        }
+        stmt.bindLong(2, entity.getSeason());
+        stmt.bindLong(3, entity.getEpisode());
+        stmt.bindString(4, entity.getNameEn());
  
         String nameRu = entity.getNameRu();
         if (nameRu != null) {
             stmt.bindString(5, nameRu);
         }
  
+        String smallPosterUrl = entity.getSmallPosterUrl();
+        if (smallPosterUrl != null) {
+            stmt.bindString(6, smallPosterUrl);
+        }
+ 
         Long seriesId = entity.getSeriesId();
         if (seriesId != null) {
-            stmt.bindLong(6, seriesId);
+            stmt.bindLong(7, seriesId);
         }
     }
 
@@ -118,11 +113,12 @@ public class EpisodeDao extends AbstractDao<Episode, Long> {
     public Episode readEntity(Cursor cursor, int offset) {
         Episode entity = new Episode( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : (byte) cursor.getShort(offset + 1), // season
-            cursor.isNull(offset + 2) ? null : (byte) cursor.getShort(offset + 2), // episode
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // nameEn
+            (byte) cursor.getShort(offset + 1), // season
+            (byte) cursor.getShort(offset + 2), // episode
+            cursor.getString(offset + 3), // nameEn
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // nameRu
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5) // seriesId
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // smallPosterUrl
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6) // seriesId
         );
         return entity;
     }
@@ -131,11 +127,12 @@ public class EpisodeDao extends AbstractDao<Episode, Long> {
     @Override
     public void readEntity(Cursor cursor, Episode entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setSeason(cursor.isNull(offset + 1) ? null : (byte) cursor.getShort(offset + 1));
-        entity.setEpisode(cursor.isNull(offset + 2) ? null : (byte) cursor.getShort(offset + 2));
-        entity.setNameEn(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setSeason((byte) cursor.getShort(offset + 1));
+        entity.setEpisode((byte) cursor.getShort(offset + 2));
+        entity.setNameEn(cursor.getString(offset + 3));
         entity.setNameRu(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setSeriesId(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
+        entity.setSmallPosterUrl(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setSeriesId(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
      }
     
     /** @inheritdoc */

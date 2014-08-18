@@ -47,8 +47,8 @@ public class SeriesDao extends AbstractDao<Series, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'SERIES' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'ALIAS' TEXT," + // 1: alias
-                "'NAME_EN' TEXT," + // 2: nameEn
+                "'ALIAS' TEXT NOT NULL UNIQUE ," + // 1: alias
+                "'NAME_EN' TEXT NOT NULL ," + // 2: nameEn
                 "'NAME_RU' TEXT," + // 3: nameRu
                 "'DESCRIPTION' TEXT);"); // 4: description
     }
@@ -68,16 +68,8 @@ public class SeriesDao extends AbstractDao<Series, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
- 
-        String alias = entity.getAlias();
-        if (alias != null) {
-            stmt.bindString(2, alias);
-        }
- 
-        String nameEn = entity.getNameEn();
-        if (nameEn != null) {
-            stmt.bindString(3, nameEn);
-        }
+        stmt.bindString(2, entity.getAlias());
+        stmt.bindString(3, entity.getNameEn());
  
         String nameRu = entity.getNameRu();
         if (nameRu != null) {
@@ -107,8 +99,8 @@ public class SeriesDao extends AbstractDao<Series, Long> {
     public Series readEntity(Cursor cursor, int offset) {
         Series entity = new Series( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // alias
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // nameEn
+            cursor.getString(offset + 1), // alias
+            cursor.getString(offset + 2), // nameEn
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // nameRu
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // description
         );
@@ -119,8 +111,8 @@ public class SeriesDao extends AbstractDao<Series, Long> {
     @Override
     public void readEntity(Cursor cursor, Series entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setAlias(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setNameEn(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setAlias(cursor.getString(offset + 1));
+        entity.setNameEn(cursor.getString(offset + 2));
         entity.setNameRu(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setDescription(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
      }

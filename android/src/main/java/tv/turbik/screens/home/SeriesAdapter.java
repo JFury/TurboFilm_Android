@@ -19,13 +19,13 @@ import tv.turbik.dao.Series;
 * @author Pavel Savinov
 * @version 05/04/14 08:56
 */
-class BasicSeriesArrayAdapter extends ArrayAdapter<Series> {
+class SeriesAdapter extends ArrayAdapter<Series> {
 
 	private final LayoutInflater inflater;
 	private final ImageLoader imageLoader;
 	private final DisplayImageOptions options;
 
-	public BasicSeriesArrayAdapter(Context context, ImageLoader imageLoader, DisplayImageOptions options) {
+	public SeriesAdapter(Context context, ImageLoader imageLoader, DisplayImageOptions options) {
 		super(context, 0);
 		this.imageLoader = imageLoader;
 		this.options = options;
@@ -35,30 +35,44 @@ class BasicSeriesArrayAdapter extends ArrayAdapter<Series> {
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
 
-		Series series = getItem(position);
+		final ViewHolder holder;
 
 		if (view == null) {
+			holder = new ViewHolder();
 			view = inflater.inflate(R.layout.home_series_item, parent, false);
+			view.setTag(holder);
+			holder.logo = (ImageView) view.findViewById(R.id.logo);
+			holder.nameEn = (TextView) view.findViewById(R.id.nameEnText);
+			holder.nameRu = (TextView) view.findViewById(R.id.nameRuText);
+		} else {
+			holder = (ViewHolder) view.getTag();
 		}
 
-		final ImageView imageView = (ImageView) view.findViewById(R.id.logo);
+		Series series = getItem(position);
+		holder.nameEn.setText(series.getNameEn());
+		holder.nameRu.setText(series.getNameRu());
 
-		imageLoader.displayImage(Images.seriesBigPoster(series.getId()), imageView, options, new SimpleImageLoadingListener(){
+		imageLoader.displayImage(Images.seriesBigPoster(series.getId()), holder.logo, options, new SimpleImageLoadingListener(){
 			@Override
 			public void onLoadingStarted(String imageUri, View view) {
-				imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+				holder.logo.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 			}
 
 			@Override
 			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+				holder.logo.setScaleType(ImageView.ScaleType.CENTER_CROP);
 			}
 		});
 
-		((TextView) view.findViewById(R.id.nameEnText)).setText(series.getNameEn());
-		((TextView) view.findViewById(R.id.nameRuText)).setText(series.getNameRu());
-
 		return view;
+	}
+
+	class ViewHolder {
+
+		private ImageView logo;
+		private TextView nameEn;
+		private TextView nameRu;
+
 	}
 
 }

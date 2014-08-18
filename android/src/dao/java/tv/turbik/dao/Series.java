@@ -11,7 +11,9 @@ import de.greenrobot.dao.DaoException;
 public class Series {
 
     private Long id;
+    /** Not-null value. */
     private String alias;
+    /** Not-null value. */
     private String nameEn;
     private String nameRu;
     private String description;
@@ -53,18 +55,22 @@ public class Series {
         this.id = id;
     }
 
+    /** Not-null value. */
     public String getAlias() {
         return alias;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setAlias(String alias) {
         this.alias = alias;
     }
 
+    /** Not-null value. */
     public String getNameEn() {
         return nameEn;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setNameEn(String nameEn) {
         this.nameEn = nameEn;
     }
