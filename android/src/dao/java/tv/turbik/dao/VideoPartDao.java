@@ -1,6 +1,5 @@
 package tv.turbik.dao;
 
-import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -8,8 +7,6 @@ import android.database.sqlite.SQLiteStatement;
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
-import de.greenrobot.dao.query.Query;
-import de.greenrobot.dao.query.QueryBuilder;
 
 import tv.turbik.dao.VideoPart;
 
@@ -29,10 +26,8 @@ public class VideoPartDao extends AbstractDao<VideoPart, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Start = new Property(1, int.class, "start", false, "START");
         public final static Property Length = new Property(2, int.class, "length", false, "LENGTH");
-        public final static Property VideoId = new Property(3, Long.class, "videoId", false, "VIDEO_ID");
     };
 
-    private Query<VideoPart> video_VideoPartListQuery;
 
     public VideoPartDao(DaoConfig config) {
         super(config);
@@ -48,8 +43,7 @@ public class VideoPartDao extends AbstractDao<VideoPart, Long> {
         db.execSQL("CREATE TABLE " + constraint + "'VIDEO_PART' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'START' INTEGER NOT NULL ," + // 1: start
-                "'LENGTH' INTEGER NOT NULL ," + // 2: length
-                "'VIDEO_ID' INTEGER);"); // 3: videoId
+                "'LENGTH' INTEGER NOT NULL );"); // 2: length
     }
 
     /** Drops the underlying database table. */
@@ -69,11 +63,6 @@ public class VideoPartDao extends AbstractDao<VideoPart, Long> {
         }
         stmt.bindLong(2, entity.getStart());
         stmt.bindLong(3, entity.getLength());
- 
-        Long videoId = entity.getVideoId();
-        if (videoId != null) {
-            stmt.bindLong(4, videoId);
-        }
     }
 
     /** @inheritdoc */
@@ -88,8 +77,7 @@ public class VideoPartDao extends AbstractDao<VideoPart, Long> {
         VideoPart entity = new VideoPart( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getInt(offset + 1), // start
-            cursor.getInt(offset + 2), // length
-            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3) // videoId
+            cursor.getInt(offset + 2) // length
         );
         return entity;
     }
@@ -100,7 +88,6 @@ public class VideoPartDao extends AbstractDao<VideoPart, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setStart(cursor.getInt(offset + 1));
         entity.setLength(cursor.getInt(offset + 2));
-        entity.setVideoId(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
      }
     
     /** @inheritdoc */
@@ -126,18 +113,4 @@ public class VideoPartDao extends AbstractDao<VideoPart, Long> {
         return true;
     }
     
-    /** Internal query to resolve the "videoPartList" to-many relationship of Video. */
-    public List<VideoPart> _queryVideo_VideoPartList(Long videoId) {
-        synchronized (this) {
-            if (video_VideoPartListQuery == null) {
-                QueryBuilder<VideoPart> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.VideoId.eq(null));
-                video_VideoPartListQuery = queryBuilder.build();
-            }
-        }
-        Query<VideoPart> query = video_VideoPartListQuery.forCurrentThread();
-        query.setParameter(0, videoId);
-        return query.list();
-    }
-
 }

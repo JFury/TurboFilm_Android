@@ -1,6 +1,5 @@
 package tv.turbik.dao;
 
-import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -8,8 +7,6 @@ import android.database.sqlite.SQLiteStatement;
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
-import de.greenrobot.dao.query.Query;
-import de.greenrobot.dao.query.QueryBuilder;
 
 import tv.turbik.dao.Video;
 
@@ -30,12 +27,8 @@ public class VideoDao extends AbstractDao<Video, Long> {
         public final static Property Lang = new Property(1, String.class, "lang", false, "LANG");
         public final static Property Quality = new Property(2, String.class, "quality", false, "QUALITY");
         public final static Property TotalLength = new Property(3, int.class, "totalLength", false, "TOTAL_LENGTH");
-        public final static Property EpisodeId = new Property(4, Long.class, "episodeId", false, "EPISODE_ID");
     };
 
-    private DaoSession daoSession;
-
-    private Query<Video> episode_VideoListQuery;
 
     public VideoDao(DaoConfig config) {
         super(config);
@@ -43,7 +36,6 @@ public class VideoDao extends AbstractDao<Video, Long> {
     
     public VideoDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -53,8 +45,7 @@ public class VideoDao extends AbstractDao<Video, Long> {
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'LANG' TEXT NOT NULL ," + // 1: lang
                 "'QUALITY' TEXT NOT NULL ," + // 2: quality
-                "'TOTAL_LENGTH' INTEGER NOT NULL ," + // 3: totalLength
-                "'EPISODE_ID' INTEGER);"); // 4: episodeId
+                "'TOTAL_LENGTH' INTEGER NOT NULL );"); // 3: totalLength
     }
 
     /** Drops the underlying database table. */
@@ -75,17 +66,6 @@ public class VideoDao extends AbstractDao<Video, Long> {
         stmt.bindString(2, entity.getLang());
         stmt.bindString(3, entity.getQuality());
         stmt.bindLong(4, entity.getTotalLength());
- 
-        Long episodeId = entity.getEpisodeId();
-        if (episodeId != null) {
-            stmt.bindLong(5, episodeId);
-        }
-    }
-
-    @Override
-    protected void attachEntity(Video entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -101,8 +81,7 @@ public class VideoDao extends AbstractDao<Video, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // lang
             cursor.getString(offset + 2), // quality
-            cursor.getInt(offset + 3), // totalLength
-            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // episodeId
+            cursor.getInt(offset + 3) // totalLength
         );
         return entity;
     }
@@ -114,7 +93,6 @@ public class VideoDao extends AbstractDao<Video, Long> {
         entity.setLang(cursor.getString(offset + 1));
         entity.setQuality(cursor.getString(offset + 2));
         entity.setTotalLength(cursor.getInt(offset + 3));
-        entity.setEpisodeId(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
      }
     
     /** @inheritdoc */
@@ -140,18 +118,4 @@ public class VideoDao extends AbstractDao<Video, Long> {
         return true;
     }
     
-    /** Internal query to resolve the "videoList" to-many relationship of Episode. */
-    public List<Video> _queryEpisode_VideoList(Long episodeId) {
-        synchronized (this) {
-            if (episode_VideoListQuery == null) {
-                QueryBuilder<Video> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.EpisodeId.eq(null));
-                episode_VideoListQuery = queryBuilder.build();
-            }
-        }
-        Query<Video> query = episode_VideoListQuery.forCurrentThread();
-        query.setParameter(0, episodeId);
-        return query.list();
-    }
-
 }

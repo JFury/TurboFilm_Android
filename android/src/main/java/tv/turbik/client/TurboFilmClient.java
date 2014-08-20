@@ -15,15 +15,17 @@ import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tv.turbik.Settings_;
-import tv.turbik.client.container.EpisodePage;
-import tv.turbik.client.container.HomePage;
-import tv.turbik.client.container.SeasonPage;
+import tv.turbik.client.episode.EpisodePage;
+import tv.turbik.client.home.HomePage;
+import tv.turbik.client.season.SeasonPage;
 import tv.turbik.client.exception.TurboException;
 import tv.turbik.client.exception.server.NotLoggedInException;
 import tv.turbik.client.exception.server.ServerException;
-import tv.turbik.client.parser.EpisodePageParser;
-import tv.turbik.client.parser.HomePageParser;
-import tv.turbik.client.parser.SeasonPageParser;
+import tv.turbik.client.episode.EpisodePageParser;
+import tv.turbik.client.home.HomePageParser;
+import tv.turbik.client.season.SeasonPageParser;
+import tv.turbik.client.series.SeriesPage;
+import tv.turbik.client.series.SeriesPageParser;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,11 +36,11 @@ import java.util.List;
  * @version 25.08.13 22:40
  */
 @EBean(scope = EBean.Scope.Singleton)
-public class TurbikClient {
+public class TurboFilmClient {
 
 	public static final String DOMAIN = "turbik.tv";
 
-	private static final Logger L = LoggerFactory.getLogger(TurbikClient.class.getSimpleName());
+	private static final Logger L = LoggerFactory.getLogger(TurboFilmClient.class.getSimpleName());
 	private static final String BASE_URL = "https://" + DOMAIN + "/";
 
 	private DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -107,12 +109,17 @@ public class TurbikClient {
 		return new HomePageParser().parse(executeRequest(get));
 	}
 
-	public SeasonPage getSeasonPage(String alias, int season) throws TurboException {
+	public SeriesPage getSeriesPage() throws TurboException {
+		HttpGet get = new HttpGet(BASE_URL + "Series");
+		return new SeriesPageParser().parse(executeRequest(get));
+	}
+
+	public SeasonPage getSeasonPage(String alias, byte season) throws TurboException {
 		HttpGet get = new HttpGet(BASE_URL + "Series/" + alias + "/Season" + season);
 		return new SeasonPageParser().parse(executeRequest(get));
 	}
 
-	public EpisodePage getEpisodePage(String alias, int season, int episode) throws TurboException {
+	public EpisodePage getEpisodePage(String alias, byte season, byte episode) throws TurboException {
 		HttpGet get = new HttpGet(BASE_URL + "Watch/" + alias + "/Season" + season + "/Episode" + episode);
 		return new EpisodePageParser().parse(executeRequest(get));
 	}

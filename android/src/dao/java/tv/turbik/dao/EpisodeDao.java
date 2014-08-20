@@ -1,6 +1,5 @@
 package tv.turbik.dao;
 
-import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -8,8 +7,6 @@ import android.database.sqlite.SQLiteStatement;
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
-import de.greenrobot.dao.query.Query;
-import de.greenrobot.dao.query.QueryBuilder;
 
 import tv.turbik.dao.Episode;
 
@@ -17,7 +14,7 @@ import tv.turbik.dao.Episode;
 /** 
  * DAO for table EPISODE.
 */
-public class EpisodeDao extends AbstractDao<Episode, Long> {
+public class EpisodeDao extends AbstractDao<Episode, Void> {
 
     public static final String TABLENAME = "EPISODE";
 
@@ -26,18 +23,16 @@ public class EpisodeDao extends AbstractDao<Episode, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property SeriesAlias = new Property(0, String.class, "seriesAlias", false, "SERIES_ALIAS");
         public final static Property Season = new Property(1, byte.class, "season", false, "SEASON");
         public final static Property Episode = new Property(2, byte.class, "episode", false, "EPISODE");
         public final static Property NameEn = new Property(3, String.class, "nameEn", false, "NAME_EN");
         public final static Property NameRu = new Property(4, String.class, "nameRu", false, "NAME_RU");
         public final static Property SmallPosterUrl = new Property(5, String.class, "smallPosterUrl", false, "SMALL_POSTER_URL");
-        public final static Property SeriesId = new Property(6, Long.class, "seriesId", false, "SERIES_ID");
+        public final static Property Hash = new Property(6, String.class, "hash", false, "HASH");
+        public final static Property MetaData = new Property(7, String.class, "metaData", false, "META_DATA");
     };
 
-    private DaoSession daoSession;
-
-    private Query<Episode> series_EpisodeListQuery;
 
     public EpisodeDao(DaoConfig config) {
         super(config);
@@ -45,20 +40,20 @@ public class EpisodeDao extends AbstractDao<Episode, Long> {
     
     public EpisodeDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'EPISODE' (" + //
-                "'_id' INTEGER PRIMARY KEY ," + // 0: id
+                "'SERIES_ALIAS' TEXT," + // 0: seriesAlias
                 "'SEASON' INTEGER NOT NULL ," + // 1: season
                 "'EPISODE' INTEGER NOT NULL ," + // 2: episode
                 "'NAME_EN' TEXT NOT NULL ," + // 3: nameEn
                 "'NAME_RU' TEXT," + // 4: nameRu
                 "'SMALL_POSTER_URL' TEXT," + // 5: smallPosterUrl
-                "'SERIES_ID' INTEGER);"); // 6: seriesId
+                "'HASH' TEXT," + // 6: hash
+                "'META_DATA' TEXT);"); // 7: metaData
     }
 
     /** Drops the underlying database table. */
@@ -72,9 +67,9 @@ public class EpisodeDao extends AbstractDao<Episode, Long> {
     protected void bindValues(SQLiteStatement stmt, Episode entity) {
         stmt.clearBindings();
  
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
+        String seriesAlias = entity.getSeriesAlias();
+        if (seriesAlias != null) {
+            stmt.bindString(1, seriesAlias);
         }
         stmt.bindLong(2, entity.getSeason());
         stmt.bindLong(3, entity.getEpisode());
@@ -90,35 +85,35 @@ public class EpisodeDao extends AbstractDao<Episode, Long> {
             stmt.bindString(6, smallPosterUrl);
         }
  
-        Long seriesId = entity.getSeriesId();
-        if (seriesId != null) {
-            stmt.bindLong(7, seriesId);
+        String hash = entity.getHash();
+        if (hash != null) {
+            stmt.bindString(7, hash);
         }
-    }
-
-    @Override
-    protected void attachEntity(Episode entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
+ 
+        String metaData = entity.getMetaData();
+        if (metaData != null) {
+            stmt.bindString(8, metaData);
+        }
     }
 
     /** @inheritdoc */
     @Override
-    public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+    public Void readKey(Cursor cursor, int offset) {
+        return null;
     }    
 
     /** @inheritdoc */
     @Override
     public Episode readEntity(Cursor cursor, int offset) {
         Episode entity = new Episode( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // seriesAlias
             (byte) cursor.getShort(offset + 1), // season
             (byte) cursor.getShort(offset + 2), // episode
             cursor.getString(offset + 3), // nameEn
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // nameRu
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // smallPosterUrl
-            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6) // seriesId
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // hash
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // metaData
         );
         return entity;
     }
@@ -126,30 +121,27 @@ public class EpisodeDao extends AbstractDao<Episode, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, Episode entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setSeriesAlias(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
         entity.setSeason((byte) cursor.getShort(offset + 1));
         entity.setEpisode((byte) cursor.getShort(offset + 2));
         entity.setNameEn(cursor.getString(offset + 3));
         entity.setNameRu(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setSmallPosterUrl(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setSeriesId(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
+        entity.setHash(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setMetaData(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
      }
     
     /** @inheritdoc */
     @Override
-    protected Long updateKeyAfterInsert(Episode entity, long rowId) {
-        entity.setId(rowId);
-        return rowId;
+    protected Void updateKeyAfterInsert(Episode entity, long rowId) {
+        // Unsupported or missing PK type
+        return null;
     }
     
     /** @inheritdoc */
     @Override
-    public Long getKey(Episode entity) {
-        if(entity != null) {
-            return entity.getId();
-        } else {
-            return null;
-        }
+    public Void getKey(Episode entity) {
+        return null;
     }
 
     /** @inheritdoc */
@@ -158,18 +150,4 @@ public class EpisodeDao extends AbstractDao<Episode, Long> {
         return true;
     }
     
-    /** Internal query to resolve the "episodeList" to-many relationship of Series. */
-    public List<Episode> _querySeries_EpisodeList(Long seriesId) {
-        synchronized (this) {
-            if (series_EpisodeListQuery == null) {
-                QueryBuilder<Episode> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.SeriesId.eq(null));
-                series_EpisodeListQuery = queryBuilder.build();
-            }
-        }
-        Query<Episode> query = series_EpisodeListQuery.forCurrentThread();
-        query.setParameter(0, seriesId);
-        return query.list();
-    }
-
 }

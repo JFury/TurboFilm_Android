@@ -9,7 +9,6 @@ public class VideoPart {
     private Long id;
     private int start;
     private int length;
-    private Long videoId;
 
     public VideoPart() {
     }
@@ -18,11 +17,10 @@ public class VideoPart {
         this.id = id;
     }
 
-    public VideoPart(Long id, int start, int length, Long videoId) {
+    public VideoPart(Long id, int start, int length) {
         this.id = id;
         this.start = start;
         this.length = length;
-        this.videoId = videoId;
     }
 
     public Long getId() {
@@ -47,14 +45,6 @@ public class VideoPart {
 
     public void setLength(int length) {
         this.length = length;
-    }
-
-    public Long getVideoId() {
-        return videoId;
-    }
-
-    public void setVideoId(Long videoId) {
-        this.videoId = videoId;
     }
 
 }

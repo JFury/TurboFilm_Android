@@ -7,11 +7,12 @@ import org.androidannotations.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tv.turbik.R;
-import tv.turbik.client.TurbikClient;
-import tv.turbik.client.Video;
-import tv.turbik.client.container.EpisodePage;
+import tv.turbik.client.SmartClient;
+import tv.turbik.client.episode.Video;
 import tv.turbik.client.exception.TurboException;
+import tv.turbik.client.exception.client.ParseException;
 import tv.turbik.client.exception.server.NotLoggedInException;
+import tv.turbik.dao.Episode;
 
 /**
  * @author Pavel Savinov [swapii@gmail.com]
@@ -24,11 +25,11 @@ public class EpisodeActivity extends SherlockActivity {
 
 	@ViewById VideoView video;
 
-	@Extra String alias;
-	@Extra int season;
-	@Extra int episode;
+	@Extra String seriesAlias;
+	@Extra byte season;
+	@Extra byte episode;
 
-	@Bean TurbikClient client;
+	@Bean SmartClient client;
 
 	@AfterViews
 	void afterViews() {
@@ -39,8 +40,8 @@ public class EpisodeActivity extends SherlockActivity {
 	void loadData() {
 
 		try {
-			EpisodePage page = client.getEpisodePage(alias, season, episode);
-			update(page);
+			Episode episodeItem = client.getEpisode(seriesAlias, season, episode, false);
+			update(episodeItem);
 
 		} catch (NotLoggedInException e) {
 			e.printStackTrace();
@@ -52,10 +53,15 @@ public class EpisodeActivity extends SherlockActivity {
 	}
 
 	@UiThread
-	void update(EpisodePage page) {
+	void update(Episode episode) {
 
-		String hash = page.getHash();
-		String url = Video.generateUrl(page.getMetaData(), hash, "ru", false, 0);
+		String hash = episode.getHash();
+		String url = null;
+		try {
+			url = Video.generateUrl(Video.parseMeta(episode.getMetaData()), hash, "ru", false, 0);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		L.trace("URL: " + url);
 		video.setVideoURI(Uri.parse(url));
 		video.start();

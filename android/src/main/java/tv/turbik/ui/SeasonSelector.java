@@ -12,8 +12,6 @@ import tv.turbik.R;
  */
 public class SeasonSelector extends TextView {
 
-	private SeasonNumberDialog.SeasonListener listener;
-
 	public SeasonSelector(final Context context) {
 		super(context);
 		init(context);
@@ -24,30 +22,31 @@ public class SeasonSelector extends TextView {
 		init(context);
 	}
 
-	public void setSeasonListener(SeasonNumberDialog.SeasonListener listener) {
-		this.listener = listener;
-	}
-
-	private void init(final Context context) {
-
-		setText("-----");
-
-		setTextSize(context.getResources().getDimension(R.dimen.text_size_large));
-
+	public void setSeasonListener(final int seasonsCount, int currentSeason, final SeasonNumberDialog.SeasonListener listener) {
+		updateView(currentSeason);
 		setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new SeasonNumberDialog(context, new SeasonNumberDialog.SeasonListener() {
+				new SeasonNumberDialog(getContext(), seasonsCount, new SeasonNumberDialog.SeasonListener() {
 					@Override
-					public void seasonSelected(int season) {
-
-						setText("Сезон " + season);
-
-						if (listener != null) listener.seasonSelected(season);
+					public void seasonSelected(byte season) {
+						updateView(season);
+						if (listener != null) {
+							listener.seasonSelected(season);
+						}
 
 					}
 				});
 			}
 		});
 	}
+
+	private void init(final Context context) {
+		setTextSize(context.getResources().getDimension(R.dimen.text_size_large));
+	}
+
+	private void updateView(int season) {
+		setText(getContext().getString(R.string.season_selector_text, season));
+	}
+
 }

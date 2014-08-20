@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import tv.turbik.R;
 import tv.turbik.client.exception.TurboException;
 import tv.turbik.client.exception.server.NotLoggedInException;
-import tv.turbik.client.smart.SmartClient;
+import tv.turbik.client.SmartClient;
 import tv.turbik.dao.Series;
 import tv.turbik.screens.AuthActivity_;
 import tv.turbik.screens.season.SeasonActivity_;
@@ -62,7 +62,7 @@ public class HomeActivity extends SherlockActivity {
 	void gridItemClicked(int position) {
 		Series series = adapter.getItem(position);
 		SeasonActivity_.intent(this)
-				.id(series.getId())
+				.seriesAlias(series.getAlias())
 				.start();
 	}
 
@@ -71,7 +71,7 @@ public class HomeActivity extends SherlockActivity {
 
 		try {
 
-			List<Series> series = client.getAllSeries();
+			List<Series> series = client.getAllSeries(true);
 
 			updateAdapter(series);
 
@@ -81,7 +81,7 @@ public class HomeActivity extends SherlockActivity {
 
 		} catch (TurboException e) {
 
-
+			L.error("Error getting series", e);
 		}
 
 	}

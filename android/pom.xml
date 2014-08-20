@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>Android Client</name>
-	<artifactId>android</artifactId>
+	<artifactId>turbofilm-android</artifactId>
 	<packaging>apk</packaging>
 
 	<parent>
@@ -91,9 +91,27 @@
 
 	<build>
 
-		<finalName>TurboFilm_${project.version}</finalName>
-
 		<plugins>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/dao/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
 			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

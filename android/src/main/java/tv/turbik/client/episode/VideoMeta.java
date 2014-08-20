@@ -1,4 +1,4 @@
-package tv.turbik.client.model;
+package tv.turbik.client.episode;
 
 /**
  * @author Pavel Savinov [swapii@gmail.com]

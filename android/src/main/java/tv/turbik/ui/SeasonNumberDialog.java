@@ -18,22 +18,22 @@ public class SeasonNumberDialog {
 
 	public interface SeasonListener {
 
-		public void seasonSelected(int season);
+		public void seasonSelected(byte season);
 
 	}
 
 	private final AlertDialog dialog;
 
-	public SeasonNumberDialog(Context context, final SeasonListener listener) {
+	public SeasonNumberDialog(Context context, int seasonsCount, final SeasonListener listener) {
 
 		TableLayout table = new TableLayout(context);
 		TableRow row = new TableRow(context);
 
-		for (int i = 1; i <= 30; i++) {
+		for (byte i = 1; i <= seasonsCount; i++) {
 			TextView textView = (TextView) LayoutInflater.from(context).inflate(R.layout.season_dialog_item, null);
 			textView.setText(String.valueOf(i));
 
-			final int finalI = i;
+			final byte finalI = i;
 			textView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -54,7 +54,7 @@ public class SeasonNumberDialog {
 
 		dialog = new AlertDialog.Builder(context)
 				.setView(table)
-				.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();

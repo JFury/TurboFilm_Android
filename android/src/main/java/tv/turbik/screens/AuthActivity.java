@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tv.turbik.R;
 import tv.turbik.Settings_;
-import tv.turbik.client.TurbikClient;
+import tv.turbik.client.TurboFilmClient;
 import tv.turbik.client.exception.TurboException;
 import tv.turbik.client.exception.server.NotLoggedInException;
 
@@ -26,7 +26,7 @@ public class AuthActivity extends SherlockActivity {
 	@ViewById EditText passwordField;
 	@ViewById Button signinButton;
 
-	@Bean TurbikClient client;
+	@Bean TurboFilmClient client;
 	@Pref Settings_ settings;
 
 	@Click

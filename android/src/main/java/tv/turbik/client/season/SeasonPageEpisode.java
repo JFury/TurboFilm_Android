@@ -1,14 +1,14 @@
-package tv.turbik.client.model;
+package tv.turbik.client.season;
 
 /**
  * @author Pavel Savinov [swapii@gmail.com]
  * @version 23.11.13 13:11
  */
-public class BasicEpisode {
+public class SeasonPageEpisode {
 
 	private String smallPosterUrl;
-	private int season;
-	private int episode;
+	private byte season;
+	private byte episode;
 	private String nameEn;
 	private String nameRu;
 	private boolean hasEnAudio;
@@ -29,15 +29,15 @@ public class BasicEpisode {
 		return season;
 	}
 
-	public void setSeason(int season) {
+	public void setSeason(byte season) {
 		this.season = season;
 	}
 
-	public int getEpisode() {
+	public byte getEpisode() {
 		return episode;
 	}
 
-	public void setEpisode(int episode) {
+	public void setEpisode(byte episode) {
 		this.episode = episode;
 	}
 

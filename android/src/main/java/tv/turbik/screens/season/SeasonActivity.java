@@ -9,8 +9,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import org.androidannotations.annotations.*;
 import tv.turbik.R;
 import tv.turbik.client.Images;
+import tv.turbik.client.SmartClient;
 import tv.turbik.client.exception.TurboException;
-import tv.turbik.client.smart.SmartClient;
 import tv.turbik.dao.Episode;
 import tv.turbik.dao.Series;
 import tv.turbik.screens.episode.EpisodeActivity_;
@@ -32,8 +32,8 @@ public class SeasonActivity extends SherlockActivity implements SeasonNumberDial
 	@ViewById SeasonSelector seasonSelector;
 	@ViewById GridView grid;
 
-	@Extra long id;
-	@Extra int season = 1;
+	@Extra String seriesAlias;
+	@Extra byte season = 1;
 
 	@Bean SmartClient client;
 
@@ -42,24 +42,26 @@ public class SeasonActivity extends SherlockActivity implements SeasonNumberDial
 	@AfterViews
 	void afterViews() {
 
-		seasonSelector.setSeasonListener(new SeasonNumberDialog.SeasonListener() {
-			@Override
-			public void seasonSelected(int season) {
-				SeasonActivity_.intent(SeasonActivity.this)
-						.id(id)
-						.season(season)
-						.start();
-			}
-		});
+		Series series = client.getSeries(seriesAlias);
 
-		ImageLoader.getInstance().displayImage(Images.seriesBigPoster(id), poster);
+
+		ImageLoader.getInstance().displayImage(Images.seriesBigPoster(series.getId()), poster);
 
 		adapter = new EpisodeAdapter(this);
 		grid.setAdapter(adapter);
 
-		Series series = client.getSeries(id);
 		nameEnText.setText(series.getNameEn());
 		nameRuText.setText(series.getNameRu());
+
+		seasonSelector.setSeasonListener(series.getSeasonsCount(), season, new SeasonNumberDialog.SeasonListener() {
+			@Override
+			public void seasonSelected(byte season) {
+				SeasonActivity_.intent(SeasonActivity.this)
+						.seriesAlias(seriesAlias)
+						.season(season)
+						.start();
+			}
+		});
 
 		loadData();
 	}
@@ -68,14 +70,14 @@ public class SeasonActivity extends SherlockActivity implements SeasonNumberDial
 	void gridItemClicked(int position) {
 		Episode episode = adapter.getItem(position);
 		EpisodeActivity_.intent(this)
-				//.alias(alias)
-				.season(season)
+				.seriesAlias(episode.getSeriesAlias())
+				.season(episode.getSeason())
 				.episode(episode.getEpisode())
 				.start();
 	}
 
 	@Override
-	public void seasonSelected(int season) {
+	public void seasonSelected(byte season) {
 		this.season = season;
 		loadData();
 	}
@@ -84,7 +86,7 @@ public class SeasonActivity extends SherlockActivity implements SeasonNumberDial
 	void loadData() {
 
 		try {
-			List<Episode> episodeList = client.getEpisodes(id, season);
+			List<Episode> episodeList = client.getEpisodes(seriesAlias, season, false);
 			update(episodeList);
 
 		} catch (TurboException e) {

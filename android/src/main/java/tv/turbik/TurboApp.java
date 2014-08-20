@@ -7,7 +7,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EApplication;
-import tv.turbik.client.TurbikClient;
+import tv.turbik.client.TurboFilmClient;
 
 /**
  * @author Pavel Savinov aka swap_i
@@ -16,7 +16,7 @@ import tv.turbik.client.TurbikClient;
 @EApplication
 public class TurboApp extends Application {
 
-	@Bean TurbikClient client;
+	@Bean TurboFilmClient client;
 
 	@Override
 	public void onCreate() {
