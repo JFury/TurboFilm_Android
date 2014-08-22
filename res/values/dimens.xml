@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<dimen name="offset_big">20dp</dimen>
-	<dimen name="offset_normal">10dp</dimen>
-	<dimen name="offset_small">5dp</dimen>
+	<dimen name="offset_tiny">4dp</dimen>
+	<dimen name="offset_small">8dp</dimen>
+	<dimen name="offset_normal">16dp</dimen>
+	<dimen name="offset_big">32dp</dimen>
 
-	<dimen name="series_square_logo">40dp</dimen>
+	<dimen name="text_size_micro">12sp</dimen>
+	<dimen name="text_size_small">14sp</dimen>
+	<dimen name="text_size_medium">18sp</dimen>
+	<dimen name="text_size_large">22sp</dimen>
+	<dimen name="text_size_huge">32sp</dimen>
 
-	<dimen name="text_big">14pt</dimen>
+	<dimen name="row">48dp</dimen>
+	<dimen name="column_width">300dp</dimen>
+	<dimen name="progress">36dp</dimen>
 
 </resources>

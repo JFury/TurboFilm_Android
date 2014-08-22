@@ -22,4 +22,8 @@ public class Images {
 		return BASE_URL + "series/" + id + "ts.jpg";
 	}
 
+	public static String episodePosterBig(String seriesAlias, String posterHash) {
+		return "https://img.turbik.tv/" + seriesAlias + "/" + posterHash + "b.jpg";
+	}
+
 }

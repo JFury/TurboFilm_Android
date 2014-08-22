@@ -6,5 +6,6 @@
 	<string name="auth_login_label">Логин:</string>
 	<string name="auth_pass_label">Пароль:</string>
 	<string name="auth_signin_button">Впустите меня</string>
+	<string name="season_text">Сезон %d</string>
 
 </resources>

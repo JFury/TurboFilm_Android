@@ -4,7 +4,8 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:orientation="vertical"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content">
+	android:layout_height="wrap_content"
+	android:padding="@dimen/offset_small">
 
 	<org.gigahub.turbofilm.ui.AspectRatioImageView
 		app:aspectRatio="0.56470588235294"
@@ -16,39 +17,43 @@
 	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:paddingTop="@dimen/offset_small"
-		android:paddingBottom="@dimen/offset_small"
-		android:paddingLeft="@dimen/offset_normal"
-		android:paddingRight="@dimen/offset_normal"
+		android:paddingLeft="@dimen/offset_small"
+		android:paddingRight="@dimen/offset_small"
 		android:background="@color/back_gray">
-
-		<TextView
-			android:id="@+id/episodeText"
-			android:layout_alignParentRight="true"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="@dimen/offset_small"
-			android:maxLines="1"
-			android:textColor="@color/gray"
-			android:textSize="@dimen/text_big"/>
 
 		<TextView
 			style="@style/TextShadow"
 			android:id="@+id/nameEnText"
+			android:layout_toLeftOf="@+id/episodeText"
+			android:layout_alignParentLeft="true"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:maxLines="1"
-			android:ellipsize="end"
-			android:textColor="@color/blue" />
+			android:paddingTop="@dimen/offset_small"
+			android:textColor="@color/blue"
+			android:singleLine="true" />
 
 		<TextView
 			style="@style/TextShadow"
 			android:id="@+id/nameRuText"
 			android:layout_below="@+id/nameEnText"
+			android:layout_toLeftOf="@+id/episodeText"
+			android:layout_alignParentLeft="true"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:maxLines="1"
-			android:ellipsize="end" />
+			android:paddingBottom="@dimen/offset_small"
+			android:singleLine="true" />
+
+		<TextView
+			android:id="@+id/episodeText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="@dimen/offset_small"
+			android:layout_alignParentRight="true"
+			android:layout_centerVertical="true"
+			android:gravity="center"
+			android:singleLine="true"
+			android:textColor="@color/gray"
+			android:textSize="@dimen/text_size_huge" />
 
 	</RelativeLayout>
 
