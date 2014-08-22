@@ -1,10 +1,10 @@
-package tv.turbik.ui;
+package org.gigahub.turbofilm.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.ImageView;
-import tv.turbik.R;
+import org.gigahub.turbofilm.R;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

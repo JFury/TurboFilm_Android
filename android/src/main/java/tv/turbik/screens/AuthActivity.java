@@ -1,17 +1,18 @@
-package tv.turbik.screens;
+package org.gigahub.turbofilm.screens;
 
 import android.widget.Button;
 import android.widget.EditText;
 import com.actionbarsherlock.app.SherlockActivity;
 import org.androidannotations.annotations.*;
 import org.androidannotations.annotations.sharedpreferences.Pref;
+import org.gigahub.turbofilm.R;
+import org.gigahub.turbofilm.Settings_;
+import org.gigahub.turbofilm.client.NotLoggedInException;
+import org.gigahub.turbofilm.client.TurboFilmClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tv.turbik.R;
-import tv.turbik.Settings_;
-import tv.turbik.client.TurboFilmClient;
-import tv.turbik.client.exception.TurboException;
-import tv.turbik.client.exception.server.NotLoggedInException;
+
+import java.io.IOException;
 
 /**
  * @author Pavel Savinov aka swap_i
@@ -49,8 +50,10 @@ public class AuthActivity extends SherlockActivity {
 
 			e.printStackTrace();
 
-		} catch (TurboException e) {
+		} catch (IOException e) {
+
 			e.printStackTrace();
+
 		}
 
 	}

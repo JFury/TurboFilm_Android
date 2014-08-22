@@ -1,10 +1,10 @@
-package tv.turbik.ui;
+package org.gigahub.turbofilm.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
-import tv.turbik.R;
+import org.gigahub.turbofilm.R;
 
 /**
  * @author Pavel Savinov
@@ -12,41 +12,53 @@ import tv.turbik.R;
  */
 public class SeasonSelector extends TextView {
 
+	private SeasonNumberDialog.SeasonListener listener;
+
+	private String seasonTextRes;
+	private int seasonCount = 1;
+
 	public SeasonSelector(final Context context) {
 		super(context);
-		init(context);
+		init();
 	}
 
 	public SeasonSelector(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init(context);
+		init();
 	}
 
-	public void setSeasonListener(final int seasonsCount, int currentSeason, final SeasonNumberDialog.SeasonListener listener) {
-		updateView(currentSeason);
+	public void setSeasonListener(SeasonNumberDialog.SeasonListener listener) {
+		this.listener = listener;
+	}
+
+	public void setSeason(int season) {
+		setText(String.format(seasonTextRes, season));
+	}
+
+	public void setSeasonCount(int seasonCount) {
+		this.seasonCount = seasonCount;
+	}
+
+	private void init() {
+
+		seasonTextRes = getResources().getString(R.string.season_text);
+
+		setSeason(1);
+
 		setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new SeasonNumberDialog(getContext(), seasonsCount, new SeasonNumberDialog.SeasonListener() {
-					@Override
-					public void seasonSelected(byte season) {
-						updateView(season);
-						if (listener != null) {
-							listener.seasonSelected(season);
-						}
 
+				new SeasonNumberDialog(getContext(), seasonCount, new SeasonNumberDialog.SeasonListener() {
+					@Override
+					public void seasonSelected(int season) {
+						setSeason(season);
+						listener.seasonSelected(season);
 					}
-				});
+				}).show();
+
 			}
 		});
-	}
-
-	private void init(final Context context) {
-		setTextSize(context.getResources().getDimension(R.dimen.text_size_large));
-	}
-
-	private void updateView(int season) {
-		setText(getContext().getString(R.string.season_selector_text, season));
 	}
 
 }

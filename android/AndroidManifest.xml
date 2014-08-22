@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="tv.turbik"
+	package="org.gigahub.turbofilm"
 	android:versionCode="1"
 	android:versionName="1.0.0-SNAPSHOT">
 
@@ -9,29 +9,31 @@
 		android:targetSdkVersion="19" />
 
 	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
 	<application
 		android:label="@string/app_name"
-		android:name=".TurboApp_"
+		android:name=".TurboApplication_"
 		android:theme="@style/TurboFilm"
 		android:allowBackup="true">
 
 		<activity
-			android:name=".screens.AuthActivity_"
-			android:windowSoftInputMode="adjustResize" />
+			android:name=".screens.AuthActivity_" />
 
-		<activity android:name=".screens.home.HomeActivity_">
+		<activity
+			android:name=".screens.home.HomeActivity_">
 
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 
-		</activity>
+			</activity>
 
 		<activity android:name=".screens.season.SeasonActivity_" />
-		<activity android:name=".screens.episode.EpisodeActivity_" />
+
+		<activity android:name=".screens.episode.EpisodeActivity_"
+			android:screenOrientation="landscape"/>
 
 	</application>
 

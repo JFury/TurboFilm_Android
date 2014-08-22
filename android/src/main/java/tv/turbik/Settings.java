@@ -1,4 +1,4 @@
-package tv.turbik;
+package org.gigahub.turbofilm;
 
 import org.androidannotations.annotations.sharedpreferences.SharedPref;
 

@@ -7,7 +7,7 @@
 	android:layout_height="wrap_content"
 	android:padding="@dimen/offset_small">
 
-	<tv.turbik.ui.AspectRatioImageView
+	<org.gigahub.turbofilm.ui.AspectRatioImageView
 		app:aspectRatio="0.34183673469388"
 		android:id="@+id/logo"
 		android:layout_width="match_parent"
@@ -27,14 +27,14 @@
 			android:id="@+id/nameEnText"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:textColor="@color/blue"
+			android:textColor="@color/blue" />
 			android:singleLine="true"/>
 
 		<TextView
 			style="@style/TextShadow"
 			android:id="@+id/nameRuText"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
+			android:layout_height="wrap_content" />
 			android:singleLine="true"/>
 
 	</LinearLayout>
