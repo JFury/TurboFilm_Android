@@ -1,8 +1,8 @@
-package org.gigahub.turbofilm;
+package tv.turbik.test.client;
 
 import org.junit.Assert;
-
 import org.junit.Test;
+import tv.turbik.Utils;
 
 /**
  * Created by swap_i on 14/02/14.

@@ -1,4 +1,4 @@
-package org.gigahub.turbofilm.screens.season;
+package tv.turbik.screens.season;
 
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
@@ -8,43 +8,38 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import org.androidannotations.annotations.*;
-import org.androidannotations.annotations.res.StringRes;
-import org.gigahub.turbofilm.R;
-import org.gigahub.turbofilm.client.Images;
-import org.gigahub.turbofilm.client.NotLoggedInException;
-import org.gigahub.turbofilm.client.ParseException;
-import org.gigahub.turbofilm.client.TurboFilmClient;
-import org.gigahub.turbofilm.client.container.SeasonPage;
-import org.gigahub.turbofilm.client.model.BasicEpisode;
-import org.gigahub.turbofilm.screens.episode.EpisodeActivity_;
-import org.gigahub.turbofilm.ui.SeasonNumberDialog;
-import org.gigahub.turbofilm.ui.SeasonSelector;
+import tv.turbik.R;
+import tv.turbik.client.Images;
+import tv.turbik.client.SmartClient;
+import tv.turbik.client.exception.TurboException;
+import tv.turbik.dao.Episode;
+import tv.turbik.dao.Series;
+import tv.turbik.screens.episode.EpisodeActivity_;
+import tv.turbik.ui.SeasonNumberDialog;
+import tv.turbik.ui.SeasonSelector;
 
-import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Pavel Savinov [swapii@gmail.com]
  * @version 23.11.13 12:38
  */
 @EActivity(R.layout.season)
-public class SeasonActivity extends SherlockActivity implements SeasonNumberDialog.SeasonListener {
+public class SeasonActivity extends SherlockActivity {
 
-	ImageView seriesIcon;
-	TextView nameEnText;
-	TextView nameRuText;
-	SeasonSelector seasonSelector;
+	@ViewById ImageView poster;
+	@ViewById TextView nameEnText;
+	@ViewById TextView nameRuText;
+	@ViewById SeasonSelector seasonSelector;
 
 	@ViewById GridView grid;
 
-	@Extra int id;
-	@Extra String alias;
-	@Extra int season = 1;
+	@Extra String seriesAlias;
+	@Extra byte season = 1;
 
-	@Bean TurboFilmClient client;
+	@Bean SmartClient client;
 
-	@StringRes(R.string.season_text) String seasonTextRes;
-
-	private ArrayAdapter<BasicEpisode> adapter;
+	private ArrayAdapter<Episode> adapter;
 
 	@AfterViews
 	void afterViews() {
@@ -56,16 +51,26 @@ public class SeasonActivity extends SherlockActivity implements SeasonNumberDial
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(false);
 
-		seriesIcon = ((ImageView) actionBar.getCustomView().findViewById(R.id.seriesIcon));
-		nameEnText = (TextView) actionBar.getCustomView().findViewById(R.id.nameEnText);
-		nameRuText = (TextView) actionBar.getCustomView().findViewById(R.id.nameRuText);
-		seasonSelector = (SeasonSelector) actionBar.getCustomView().findViewById(R.id.seasonText);
 
-		ImageLoader.getInstance().displayImage(Images.seriesSmallSquare(id), seriesIcon);
-		seasonSelector.setSeasonListener(this);
+		Series series = client.getSeries(seriesAlias);
+		nameEnText.setText(series.getNameEn());
+		nameRuText.setText(series.getNameRu());
 
-		adapter = new BasicEpisodeArrayAdapter(this, alias);
+		seasonSelector.setSeasonCount(series.getSeasonsCount());
 
+		ImageLoader.getInstance().displayImage(Images.seriesSmallSquare(series.getId()), poster);
+
+		adapter = new EpisodeAdapter(this);
+
+		seasonSelector.setSeasonListener(new SeasonNumberDialog.SeasonListener() {
+					@Override
+					public void seasonSelected(byte season) {
+						SeasonActivity_.intent(SeasonActivity.this)
+								.seriesAlias(seriesAlias)
+								.season(season)
+								.start();
+					}
+				});
 		grid.setAdapter(adapter);
 
 		loadData();
@@ -73,47 +78,31 @@ public class SeasonActivity extends SherlockActivity implements SeasonNumberDial
 
 	@ItemClick
 	void gridItemClicked(int position) {
-		BasicEpisode episode = adapter.getItem(position);
+		Episode episode = adapter.getItem(position);
 		EpisodeActivity_.intent(this)
-				.alias(alias)
-				.season(season)
+				.seriesAlias(episode.getSeriesAlias())
+				.season(episode.getSeason())
 				.episode(episode.getEpisode())
 				.start();
-	}
-
-	@Override
-	public void seasonSelected(int season) {
-		this.season = season;
-		loadData();
 	}
 
 	@Background
 	void loadData() {
 
 		try {
-			SeasonPage seasonPage = client.getSeason(alias, season);
-			update(seasonPage);
+			List<Episode> episodeList = client.getEpisodes(seriesAlias, season, false);
+			update(episodeList);
 
-		} catch (NotLoggedInException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
+		} catch (TurboException e) {
 			e.printStackTrace();
 		}
 
 	}
 
 	@UiThread
-	void update(SeasonPage page) {
-
-		nameEnText.setText(page.getSeriesNameEn());
-		nameRuText.setText(page.getSeriesNameRu());
-
-		seasonSelector.setSeasonCount(page.getSeasonsCount());
-
+	void update(List<Episode> episodeList) {
 		adapter.clear();
-		adapter.addAll(page.getEpisodes());
+		adapter.addAll(episodeList);
 		adapter.notifyDataSetChanged();
 	}
 

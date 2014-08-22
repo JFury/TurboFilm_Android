@@ -1,4 +1,4 @@
-package org.gigahub.turbofilm.screens.episode;
+package tv.turbik.screens.episode;
 
 import android.net.Uri;
 import android.view.View;
@@ -6,16 +6,15 @@ import android.view.ViewGroup;
 import android.widget.VideoView;
 import com.actionbarsherlock.app.SherlockActivity;
 import org.androidannotations.annotations.*;
-import org.gigahub.turbofilm.R;
-import org.gigahub.turbofilm.client.NotLoggedInException;
-import org.gigahub.turbofilm.client.ParseException;
-import org.gigahub.turbofilm.client.TurboFilmClient;
-import org.gigahub.turbofilm.client.Video;
-import org.gigahub.turbofilm.client.container.EpisodePage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
+import tv.turbik.R;
+import tv.turbik.client.SmartClient;
+import tv.turbik.client.episode.Video;
+import tv.turbik.client.exception.TurboException;
+import tv.turbik.client.exception.client.ParseException;
+import tv.turbik.client.exception.server.NotLoggedInException;
+import tv.turbik.dao.Episode;
 
 /**
  * @author Pavel Savinov [swapii@gmail.com]
@@ -31,18 +30,18 @@ public class EpisodeActivity extends SherlockActivity {
 
 	@FragmentById VideoControls controls;
 
-	@Extra String alias;
-	@Extra int season;
-	@Extra int episode;
+	@Extra String seriesAlias;
+	@Extra byte season;
+	@Extra byte episode;
 
-	@Bean TurboFilmClient client;
+	@Bean SmartClient client;
 
 	@AfterViews
 	void afterViews() {
 
 		getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.semi_transparent));
 
-		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+		//getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
 		controls.setVideo(video);
 
@@ -53,17 +52,14 @@ public class EpisodeActivity extends SherlockActivity {
 	void loadData() {
 
 		try {
-			EpisodePage page = client.getEpisode(alias, season, episode);
-			update(page);
+			Episode episodeItem = client.getEpisode(seriesAlias, season, episode, false);
+			update(episodeItem);
 
 		} catch (NotLoggedInException e) {
 			e.printStackTrace();
 
-		} catch (IOException e) {
+		} catch (TurboException e) {
 			e.printStackTrace();
-
-		} catch (ParseException e) {
-
 		}
 	}
 
@@ -89,10 +85,15 @@ public class EpisodeActivity extends SherlockActivity {
 	}
 
 	@UiThread
-	void update(EpisodePage page) {
+	void update(Episode episode) {
 
-		String hash = page.getHash();
-		String url = Video.generateUrl(page.getMetaData(), hash, "ru", false, 0);
+		String hash = episode.getHash();
+		String url = null;
+		try {
+			url = Video.generateUrl(Video.parseMeta(episode.getMetaData()), hash, "ru", false, 0);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		L.trace("URL: " + url);
 		video.setVideoURI(Uri.parse(url));
 

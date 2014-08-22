@@ -24,7 +24,7 @@
 		android:indeterminate="true"/>
 
 	<fragment
-		class="org.gigahub.turbofilm.screens.episode.VideoControls_"
+		class="tv.turbik.screens.episode.VideoControls_"
 		android:id="@+id/controls"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

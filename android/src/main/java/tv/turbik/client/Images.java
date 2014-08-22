@@ -1,4 +1,4 @@
-package org.gigahub.turbofilm.client;
+package tv.turbik.client;
 
 /**
  * @author Pavel Savinov [swapii@gmail.com]
@@ -10,20 +10,20 @@ public class Images {
 
 	private static final String BASE_URL = "http://s." + TurboFilmClient.DOMAIN + "/i/";
 
-	public static String seriesSmallSquare(int id) {
-		return BASE_URL + "series/" + id + ".png";
+	private static final String SMALL_SQUARE = "%sseries/%d.png";
+	private static final String MID_POSTER = "%sseries/%ds.jpg";
+	private static final String BIG_POSTER = "%sseries/%dts.jpg";
+
+	public static String seriesSmallSquare(short id) {
+		return String.format(SMALL_SQUARE, BASE_URL, id);
 	}
 
-	public static String seriesMidPoster(int id) {
-		return BASE_URL + "series/" + id + "s.jpg";
+	public static String seriesMidPoster(short id) {
+		return String.format(MID_POSTER, BASE_URL, id);
 	}
 
-	public static String seriesBigPoster(int id) {
-		return BASE_URL + "series/" + id + "ts.jpg";
-	}
-
-	public static String episodePosterBig(String seriesAlias, String posterHash) {
-		return "https://img.turbik.tv/" + seriesAlias + "/" + posterHash + "b.jpg";
+	public static String seriesBigPoster(short id) {
+		return String.format(BIG_POSTER, BASE_URL, id);
 	}
 
 }

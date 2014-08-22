@@ -5,6 +5,8 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
+	<include layout="@layout/season_info" />
+
 	<GridView
 		android:id="@+id/grid"
 		android:layout_width="match_parent"
@@ -13,5 +15,6 @@
 		android:padding="@dimen/offset_small"
 		android:columnWidth="200dp"
 		android:numColumns="auto_fit"/>
+
 
 </LinearLayout>

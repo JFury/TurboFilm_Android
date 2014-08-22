@@ -1,6 +1,6 @@
-package org.gigahub.turbofilm.client.parser;
+package tv.turbik.client;
 
-import org.gigahub.turbofilm.client.ParseException;
+import tv.turbik.client.exception.client.ParseException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,10 +11,16 @@ import java.util.regex.Pattern;
  */
 public abstract class Parser {
 
-	protected String getString(String text, Pattern pattern) throws ParseException {
+	protected static String parseString(String text, Pattern pattern) throws ParseException {
 		Matcher matcher = pattern.matcher(text);
-		if (!matcher.find()) throw new ParseException();
-		return matcher.group(1);
+		if (!matcher.find()) throw new ParseException("Can't parse input string");
+		return matcher.group(1).trim();
+	}
+
+	protected int parseInt(String text, Pattern pattern) throws ParseException {
+		Matcher matcher = pattern.matcher(text);
+		if (!matcher.find()) throw new ParseException("Can't parse input string");
+		return Integer.parseInt(matcher.group(1));
 	}
 
 }

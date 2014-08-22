@@ -37,7 +37,7 @@
 		android:textSize="@dimen/text_size_large"
 		android:singleLine="true"/>
 
-	<org.gigahub.turbofilm.ui.SeasonSelector
+	<tv.turbik.ui.SeasonSelector
 		android:id="@+id/seasonText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"

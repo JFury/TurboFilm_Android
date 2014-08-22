@@ -1,4 +1,4 @@
-package org.gigahub.turbofilm;
+package tv.turbik;
 
 /**
  * Created by swap_i on 14/02/14.

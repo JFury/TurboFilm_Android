@@ -1,4 +1,4 @@
-package org.gigahub.turbofilm.client;
+package tv.turbik.client;
 
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.sharedpreferences.Pref;
@@ -12,16 +12,20 @@ import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicNameValuePair;
-import org.gigahub.turbofilm.Settings_;
-import org.gigahub.turbofilm.client.container.EpisodePage;
-import org.gigahub.turbofilm.client.container.HomePage;
-import org.gigahub.turbofilm.client.container.SeasonPage;
-import org.gigahub.turbofilm.client.container.ToolbarSeriesContainer;
-import org.gigahub.turbofilm.client.parser.EpisodePageParser;
-import org.gigahub.turbofilm.client.parser.SeasonPageParser;
-import org.gigahub.turbofilm.client.parser.ToolbarSeriesParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tv.turbik.Settings_;
+import tv.turbik.client.episode.EpisodePage;
+import tv.turbik.client.home.HomePage;
+import tv.turbik.client.season.SeasonPage;
+import tv.turbik.client.exception.TurboException;
+import tv.turbik.client.exception.server.NotLoggedInException;
+import tv.turbik.client.exception.server.ServerException;
+import tv.turbik.client.episode.EpisodePageParser;
+import tv.turbik.client.home.HomePageParser;
+import tv.turbik.client.season.SeasonPageParser;
+import tv.turbik.client.series.SeriesPage;
+import tv.turbik.client.series.SeriesPageParser;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,7 +80,7 @@ public class TurboFilmClient {
 		httpClient.getCookieStore().addCookie(cookie);
 	}
 
-	public void singin(String login, String password) throws NotLoggedInException, IOException {
+	public void singin(String login, String password) throws TurboException {
 
 		HttpPost post = new HttpPost(BASE_URL + "Signin");
 
@@ -84,60 +88,57 @@ public class TurboFilmClient {
 		list.add(new BasicNameValuePair("login", login));
 		list.add(new BasicNameValuePair("passwd", password));
 		list.add(new BasicNameValuePair("remember", "on"));
-		post.setEntity(new UrlEncodedFormEntity(list));
 
-		HttpResponse response = httpClient.execute(post);
+		try {
+			post.setEntity(new UrlEncodedFormEntity(list));
 
-		String text = IOUtils.toString(response.getEntity().getContent());
+			HttpResponse response = httpClient.execute(post);
 
-		if (text.contains("Только верующий сможет пройти"))
-			throw new NotLoggedInException();
+			String text = IOUtils.toString(response.getEntity().getContent());
+
+			if (text.contains("Только верующий сможет пройти"))
+				throw new NotLoggedInException();
+		} catch (IOException e) {
+			throw new ServerException(e);
+		}
 
 	}
 
-	public HomePage getHome() throws NotLoggedInException, IOException, ParseException {
-
+	public HomePage getHomePage() throws TurboException {
 		HttpGet get = new HttpGet(BASE_URL);
-		HttpResponse response = httpClient.execute(get);
-
-		String text = IOUtils.toString(response.getEntity().getContent());
-
-		if (text.contains("Только верующий сможет пройти"))
-			throw new NotLoggedInException();
-
-		HomePage container = new HomePage();
-
-		ToolbarSeriesContainer series = new ToolbarSeriesParser().parse(text);
-
-		container.setTopSeries(series);
-
-		return container;
+		return new HomePageParser().parse(executeRequest(get));
 	}
 
-	public SeasonPage getSeason(String alias, int season) throws NotLoggedInException, IOException, ParseException {
+	public SeriesPage getSeriesPage() throws TurboException {
+		HttpGet get = new HttpGet(BASE_URL + "Series");
+		return new SeriesPageParser().parse(executeRequest(get));
+	}
 
+	public SeasonPage getSeasonPage(String alias, byte season) throws TurboException {
 		HttpGet get = new HttpGet(BASE_URL + "Series/" + alias + "/Season" + season);
-		HttpResponse response = httpClient.execute(get);
-
-		String text = IOUtils.toString(response.getEntity().getContent());
-
-		if (text.contains("Только верующий сможет пройти"))
-			throw new NotLoggedInException();
-
-		return new SeasonPageParser().parse(text);
+		return new SeasonPageParser().parse(executeRequest(get));
 	}
 
-	public EpisodePage getEpisode(String alias, int season, int episode) throws NotLoggedInException, IOException, ParseException {
-
+	public EpisodePage getEpisodePage(String alias, byte season, byte episode) throws TurboException {
 		HttpGet get = new HttpGet(BASE_URL + "Watch/" + alias + "/Season" + season + "/Episode" + episode);
-		HttpResponse response = httpClient.execute(get);
+		return new EpisodePageParser().parse(executeRequest(get));
+	}
 
-		String text = IOUtils.toString(response.getEntity().getContent());
+	private String executeRequest(HttpGet get) throws ServerException {
 
-		if (text.contains("Только верующий сможет пройти"))
-			throw new NotLoggedInException();
+		try {
+			HttpResponse response = httpClient.execute(get);
 
-		return new EpisodePageParser().parse(text);
+			String text = IOUtils.toString(response.getEntity().getContent());
+
+			if (text.contains("Только верующий сможет пройти"))
+				throw new NotLoggedInException();
+
+			return text;
+		} catch (IOException e) {
+			throw new ServerException(e);
+		}
+
 	}
 
 }

@@ -1,10 +1,10 @@
-package org.gigahub.turbofilm.ui;
+package tv.turbik.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
-import org.gigahub.turbofilm.R;
+import tv.turbik.R;
 
 /**
  * @author Pavel Savinov
@@ -15,7 +15,7 @@ public class SeasonSelector extends TextView {
 	private SeasonNumberDialog.SeasonListener listener;
 
 	private String seasonTextRes;
-	private int seasonCount = 1;
+	private byte seasonCount = 1;
 
 	public SeasonSelector(final Context context) {
 		super(context);
@@ -31,11 +31,11 @@ public class SeasonSelector extends TextView {
 		this.listener = listener;
 	}
 
-	public void setSeason(int season) {
+	public void setSeason(byte season) {
 		setText(String.format(seasonTextRes, season));
 	}
 
-	public void setSeasonCount(int seasonCount) {
+	public void setSeasonCount(byte seasonCount) {
 		this.seasonCount = seasonCount;
 	}
 
@@ -43,7 +43,7 @@ public class SeasonSelector extends TextView {
 
 		seasonTextRes = getResources().getString(R.string.season_text);
 
-		setSeason(1);
+		setSeason((byte) 1);
 
 		setOnClickListener(new OnClickListener() {
 			@Override
@@ -51,7 +51,7 @@ public class SeasonSelector extends TextView {
 
 				new SeasonNumberDialog(getContext(), seasonCount, new SeasonNumberDialog.SeasonListener() {
 					@Override
-					public void seasonSelected(int season) {
+					public void seasonSelected(byte season) {
 						setSeason(season);
 						listener.seasonSelected(season);
 					}

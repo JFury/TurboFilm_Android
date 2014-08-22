@@ -1,4 +1,4 @@
-package org.gigahub.turbofilm.ui;
+package tv.turbik.ui;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import org.gigahub.turbofilm.R;
+import tv.turbik.R;
 
 /**
  * @author Pavel Savinov
@@ -17,11 +17,11 @@ public class SeasonNumberDialog extends AlertDialog {
 
 	public interface SeasonListener {
 
-		public void seasonSelected(int season);
+		public void seasonSelected(byte season);
 
 	}
 
-	public SeasonNumberDialog(Context context, int seasonCount, final SeasonListener listener) {
+	public SeasonNumberDialog(Context context, byte seasonCount, final SeasonListener listener) {
 		super(context);
 
 		LayoutInflater inflater = LayoutInflater.from(context);
@@ -29,11 +29,11 @@ public class SeasonNumberDialog extends AlertDialog {
 		TableLayout table = new TableLayout(context);
 		TableRow row = new TableRow(context);
 
-		for (int i = 1; i <= seasonCount; i++) {
+		for (byte i = 1; i <= seasonCount; i++) {
 			TextView textView = (TextView) inflater.inflate(R.layout.season_dialog_item, null);
 			textView.setText(String.valueOf(i));
 
-			final int finalI = i;
+			final byte finalI = i;
 			textView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {

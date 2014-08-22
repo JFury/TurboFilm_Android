@@ -1,12 +1,12 @@
-package org.gigahub.turbofilm.client.test;
+package tv.turbik.test.client;
 
 import org.apache.commons.io.IOUtils;
-import org.gigahub.turbofilm.client.ParseException;
-import org.gigahub.turbofilm.client.container.ToolbarSeriesContainer;
-import org.gigahub.turbofilm.client.parser.ToolbarSeriesParser;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import tv.turbik.client.exception.client.ParseException;
+import tv.turbik.client.toolbar.series.ToolbarSeriesContainer;
+import tv.turbik.client.toolbar.series.ToolbarSeriesParser;
 
 import java.io.IOException;
 

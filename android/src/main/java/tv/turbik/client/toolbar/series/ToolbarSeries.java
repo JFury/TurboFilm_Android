@@ -1,21 +1,21 @@
-package org.gigahub.turbofilm.client.model;
+package tv.turbik.client.toolbar.series;
 
 /**
  * @author Pavel Savinov [swapii@gmail.com]
  * @version 22.11.13 13:34
  */
-public class BasicSeries {
+public class ToolbarSeries {
 
-	private int id;
+	private short id;
 	private String alias;
 	private String nameEn;
 	private String nameRu;
 
-	public int getId() {
+	public short getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(short id) {
 		this.id = id;
 	}
 

@@ -1,4 +1,4 @@
-package org.gigahub.turbofilm.screens.episode;
+package tv.turbik.screens.episode;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -12,8 +12,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 import org.androidannotations.annotations.*;
-import org.gigahub.turbofilm.R;
-import org.gigahub.turbofilm.Utils;
+import tv.turbik.R;
+import tv.turbik.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

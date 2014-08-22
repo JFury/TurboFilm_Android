@@ -1,9 +1,9 @@
-package org.gigahub.turbofilm.client.test;
+package tv.turbik.test.client;
 
-import org.gigahub.turbofilm.client.Video;
-import org.gigahub.turbofilm.client.model.VideoMeta;
 import org.junit.Assert;
 import org.junit.Test;
+import tv.turbik.client.episode.Video;
+import tv.turbik.client.episode.VideoMeta;
 
 /**
  * @author Pavel Savinov [swapii@gmail.com]

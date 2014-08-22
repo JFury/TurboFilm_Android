@@ -1,14 +1,14 @@
-package org.gigahub.turbofilm.client.model;
+package tv.turbik.client.season;
 
 /**
  * @author Pavel Savinov [swapii@gmail.com]
  * @version 23.11.13 13:11
  */
-public class BasicEpisode {
+public class SeasonPageEpisode {
 
-	private String posterHash;
-	private int season;
-	private int episode;
+	private String smallPosterUrl;
+	private byte season;
+	private byte episode;
 	private String nameEn;
 	private String nameRu;
 	private boolean hasEnAudio;
@@ -17,27 +17,27 @@ public class BasicEpisode {
 	private boolean hasRuSubs;
 	private boolean hasHQ;
 
-	public String getPosterHash() {
-		return posterHash;
+	public String getSmallPosterUrl() {
+		return smallPosterUrl;
 	}
 
-	public void setPosterHash(String smallPosterUrl) {
-		this.posterHash = smallPosterUrl;
+	public void setSmallPosterUrl(String smallPosterUrl) {
+		this.smallPosterUrl = smallPosterUrl;
 	}
 
 	public int getSeason() {
 		return season;
 	}
 
-	public void setSeason(int season) {
+	public void setSeason(byte season) {
 		this.season = season;
 	}
 
-	public int getEpisode() {
+	public byte getEpisode() {
 		return episode;
 	}
 
-	public void setEpisode(int episode) {
+	public void setEpisode(byte episode) {
 		this.episode = episode;
 	}
 

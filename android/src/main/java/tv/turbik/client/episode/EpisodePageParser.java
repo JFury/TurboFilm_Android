@@ -1,13 +1,10 @@
-package org.gigahub.turbofilm.client.parser;
+package tv.turbik.client.episode;
 
-import org.gigahub.turbofilm.client.ParseException;
-import org.gigahub.turbofilm.client.Video;
-import org.gigahub.turbofilm.client.container.EpisodePage;
-import org.gigahub.turbofilm.client.model.VideoMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tv.turbik.client.Parser;
+import tv.turbik.client.exception.client.ParseException;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -18,44 +15,24 @@ public class EpisodePageParser extends Parser {
 
 	private static final Logger L = LoggerFactory.getLogger(EpisodePageParser.class.getSimpleName());
 
+	private static final Pattern NAME_EN = Pattern.compile("<a href=\"/Series/.*?\" class=\"en\">(.*?)</a>");
+	private static final Pattern NAME_RU = Pattern.compile("<a href=\"/Series/.*?\" class=\"ru\">(.*?)</a>");
+
 	private static final Pattern META_DATA = Pattern.compile("<input type=\"hidden\" id=\"metadata\" value=\"(.*?)\" />");
 	private static final Pattern HASH = Pattern.compile("<input type=\"hidden\" id=\"hash\" value=\"(.*?)\" />");
 
-	private static final Pattern META_SCREEN = Pattern.compile("<screen>(.*?)</screen>");
-	private static final Pattern META_DEFAULT_SOURCE = Pattern.compile("<sources2>.*?<default>(.*?)</default>.*?</sources2>", Pattern.DOTALL);
-	private static final Pattern META_HQ_SOURCE = Pattern.compile("<sources2>.*?<hq>(.*?)</hq>.*?</sources2>", Pattern.DOTALL);
-	private static final Pattern META_EID = Pattern.compile("<eid>(.*?)</eid>");
-	private static final Pattern META_ASPECT = Pattern.compile("<aspect>(.*?)</aspect>");
-
-	public EpisodePage parse(String text) throws ParseException {
+	public EpisodePage parse(String pageSource) throws ParseException {
 
 		EpisodePage page = new EpisodePage();
-
-		Matcher metaMatcher = META_DATA.matcher(text);
-		if (!metaMatcher.find()) throw new ParseException();
-		page.setMetaData(parseMeta(metaMatcher.group(1)));
-
-		Matcher hashMatcher = HASH.matcher(text);
-		if (!hashMatcher.find()) throw new ParseException();
-		page.setHash(new StringBuilder(hashMatcher.group(1)).reverse().toString());
+		String metaData = Video.decodeMeta(parseString(pageSource, META_DATA));
+		L.trace("MetaData: " + metaData);
+		page.setMetaData(metaData);
+		page.setHash(new StringBuilder(parseString(pageSource, HASH)).reverse().toString());
+		page.setNameEn(parseString(pageSource, NAME_EN));
+		page.setNameRu(parseString(pageSource, NAME_RU));
+		//page.setSmallPosterUrl();
 
 		return page;
-	}
-
-	private VideoMeta parseMeta(String encodedMeta) throws ParseException {
-
-		String decodedMeta = Video.decodeMeta(encodedMeta);
-
-		VideoMeta meta = new VideoMeta();
-
-		meta.setScreen(getString(decodedMeta, META_SCREEN));
-		meta.setDefaultSource(getString(decodedMeta, META_DEFAULT_SOURCE));
-		meta.setHqSource(getString(decodedMeta, META_HQ_SOURCE));
-
-		meta.setEid(Integer.parseInt(getString(decodedMeta, META_EID)));
-		meta.setAspect(Integer.parseInt(getString(decodedMeta, META_ASPECT)));
-
-		return meta;
 	}
 
 }

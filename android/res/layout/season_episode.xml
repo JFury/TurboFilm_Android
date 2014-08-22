@@ -7,18 +7,17 @@
 	android:layout_height="wrap_content"
 	android:padding="@dimen/offset_small">
 
-	<org.gigahub.turbofilm.ui.AspectRatioImageView
+	<tv.turbik.ui.AspectRatioImageView
 		app:aspectRatio="0.56470588235294"
 		android:id="@+id/frameImage"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:scaleType="centerCrop"/>
+		android:scaleType="centerCrop" />
 
 	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:paddingLeft="@dimen/offset_small"
-		android:paddingRight="@dimen/offset_small"
+		android:padding="@dimen/offset_small"
 		android:background="@color/back_gray">
 
 		<TextView
@@ -46,11 +45,11 @@
 		<TextView
 			android:id="@+id/episodeText"
 			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			android:layout_height="match_parent"
 			android:layout_marginLeft="@dimen/offset_small"
 			android:layout_alignParentRight="true"
 			android:layout_centerVertical="true"
-			android:gravity="center"
+			android:gravity="center_vertical"
 			android:singleLine="true"
 			android:textColor="@color/gray"
 			android:textSize="@dimen/text_size_huge" />

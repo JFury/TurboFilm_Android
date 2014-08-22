@@ -1,4 +1,4 @@
-package org.gigahub.turbofilm.screens.home;
+package tv.turbik.screens.home;
 
 import android.content.Intent;
 import android.widget.ArrayAdapter;
@@ -9,18 +9,17 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import org.androidannotations.annotations.*;
-import org.gigahub.turbofilm.R;
-import org.gigahub.turbofilm.client.NotLoggedInException;
-import org.gigahub.turbofilm.client.ParseException;
-import org.gigahub.turbofilm.client.TurboFilmClient;
-import org.gigahub.turbofilm.client.container.HomePage;
-import org.gigahub.turbofilm.client.model.BasicSeries;
-import org.gigahub.turbofilm.screens.AuthActivity_;
-import org.gigahub.turbofilm.screens.season.SeasonActivity_;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tv.turbik.R;
+import tv.turbik.client.SmartClient;
+import tv.turbik.client.exception.TurboException;
+import tv.turbik.client.exception.server.NotLoggedInException;
+import tv.turbik.dao.Series;
+import tv.turbik.screens.AuthActivity_;
+import tv.turbik.screens.season.SeasonActivity_;
 
-import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Pavel Savinov aka swap_i
@@ -34,9 +33,9 @@ public class HomeActivity extends SherlockActivity {
 
 	@ViewById GridView grid;
 
-	@Bean TurboFilmClient client;
+	@Bean SmartClient client;
 
-	private ArrayAdapter<BasicSeries> adapter;
+	private ArrayAdapter<Series> adapter;
 
 	@AfterViews
 	void afterViews() {
@@ -51,7 +50,7 @@ public class HomeActivity extends SherlockActivity {
 
 		final ImageLoader imageLoader = ImageLoader.getInstance();
 
-		adapter = new BasicSeriesArrayAdapter(this, imageLoader, options);
+		adapter = new SeriesAdapter(this, imageLoader, options);
 
 		grid.setAdapter(adapter);
 
@@ -62,10 +61,9 @@ public class HomeActivity extends SherlockActivity {
 
 	@ItemClick
 	void gridItemClicked(int position) {
-		BasicSeries series = adapter.getItem(position);
+		Series series = adapter.getItem(position);
 		SeasonActivity_.intent(this)
-				.id(series.getId())
-				.alias(series.getAlias())
+				.seriesAlias(series.getAlias())
 				.start();
 	}
 
@@ -74,19 +72,15 @@ public class HomeActivity extends SherlockActivity {
 
 		try {
 
-			HomePage homePage = client.getHome();
+			List<Series> series = client.getAllSeries(true);
 
-			updateAdapter(homePage);
+			updateAdapter(series);
 
 		} catch (NotLoggedInException e) {
 
 			AuthActivity_.intent(this).startForResult(AUTH_REQUEST);
 
-		} catch (IOException e) {
-
-			L.error("IO error", e);
-
-		} catch (ParseException e) {
+		} catch (TurboException e) {
 
 			L.error("Parse error", e);
 
@@ -95,10 +89,9 @@ public class HomeActivity extends SherlockActivity {
 	}
 
 	@UiThread
-	void updateAdapter(HomePage homePage) {
+	void updateAdapter(List<Series> seriesList) {
 		adapter.clear();
-		adapter.addAll(homePage.getTopSeries().getMySeries());
-		adapter.addAll(homePage.getTopSeries().getOtherSeries());
+		adapter.addAll(seriesList);
 		adapter.notifyDataSetChanged();
 	}
 
