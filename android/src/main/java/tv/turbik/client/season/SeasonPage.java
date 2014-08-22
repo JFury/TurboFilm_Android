@@ -1,4 +1,6 @@
-package tv.turbik.client.season;
+package org.gigahub.turbofilm.client.container;
+
+import org.gigahub.turbofilm.client.model.BasicEpisode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +11,9 @@ import java.util.List;
  */
 public class SeasonPage {
 
-	private byte seasonsCount;
-	private byte currentSeason;
-	private List<SeasonPageEpisode> episodes = new ArrayList<SeasonPageEpisode>();
+	private int seasonsCount;
+	private int currentSeason;
+	private List<BasicEpisode> episodes = new ArrayList<BasicEpisode>();
 	private List<String> translations = new ArrayList<String>();
 
 	/**
@@ -25,15 +27,15 @@ public class SeasonPage {
 		return seasonsCount;
 	}
 
-	public void setSeasonsCount(byte seasonsCount) {
+	public void setSeasonsCount(int seasonsCount) {
 		this.seasonsCount = seasonsCount;
 	}
 
-	public byte getCurrentSeason() {
+	public int getCurrentSeason() {
 		return currentSeason;
 	}
 
-	public void setCurrentSeason(byte currentSeason) {
+	public void setCurrentSeason(int currentSeason) {
 		this.currentSeason = currentSeason;
 	}
 
@@ -45,7 +47,7 @@ public class SeasonPage {
 		this.seriesDescription = seriesDescription;
 	}
 
-	public List<SeasonPageEpisode> getEpisodes() {
+	public List<BasicEpisode> getEpisodes() {
 		return episodes;
 	}
 

@@ -1,7 +1,8 @@
-package tv.turbik.client.season;
+package org.gigahub.turbofilm.client.parser;
 
-import tv.turbik.client.exception.client.ParseException;
-import tv.turbik.client.Parser;
+import org.gigahub.turbofilm.client.ParseException;
+import org.gigahub.turbofilm.client.container.SeasonPage;
+import org.gigahub.turbofilm.client.model.BasicEpisode;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,7 +23,7 @@ public class SeasonPageParser extends Parser {
 	private static final Pattern EPISODES = Pattern.compile("<div class=\"sserieslistbox\">(.*?)</div>", Pattern.DOTALL);
 	private static final Pattern EPISODE = Pattern.compile("<a href(.*?)</a>", Pattern.DOTALL);
 
-	private static final Pattern POSTER = Pattern.compile("<img src=\"(.*?)\"");
+	private static final Pattern POSTER = Pattern.compile("<img src=\"//img.turbik.tv/.*?/(.*?)a.jpg\"");
 
 	private static final Pattern HQ = Pattern.compile("<span class=\"sserieshq\"></span>");
 	private static final Pattern AUDIO_EN = Pattern.compile("<span class=\"sseriesesound\"></span>");
@@ -58,24 +59,25 @@ public class SeasonPageParser extends Parser {
 
 		Matcher matcher = SEASONS.matcher(text);
 
-		if (!matcher.find()) throw new ParseException("Can't parse season page");
+		if (!matcher.find()) throw new ParseException();
 
 		String seasonsText = matcher.group();
 
+
 		Matcher lastMatcher = LAST_SEASON.matcher(seasonsText);
-		if (!lastMatcher.find()) throw new ParseException("Can't parse season page");
-		seasonPage.setSeasonsCount(Byte.parseByte(lastMatcher.group(1)));
+		if (!lastMatcher.find()) throw new ParseException();
+		seasonPage.setSeasonsCount(Integer.parseInt(lastMatcher.group(1)));
 
 		Matcher currentMatcher = CURRENT_SEASON.matcher(seasonsText);
-		if (!currentMatcher.find()) throw new ParseException("Can't parse season page");
-		seasonPage.setCurrentSeason(Byte.parseByte(currentMatcher.group(1)));
+		if (!currentMatcher.find()) throw new ParseException();
+		seasonPage.setCurrentSeason(Integer.parseInt(currentMatcher.group(1)));
 
 	}
 
 	private void parseEpisodes(String text, SeasonPage seasonPage) throws ParseException {
 
 		Matcher matcher = EPISODES.matcher(text);
-		if (!matcher.find()) throw new ParseException("Can't parse season page");
+		if (!matcher.find()) throw new ParseException();
 
 		String episodesText = matcher.group();
 
@@ -86,16 +88,16 @@ public class SeasonPageParser extends Parser {
 
 	}
 
-	private SeasonPageEpisode parseOneEpisode(String s) throws ParseException {
-		SeasonPageEpisode e = new SeasonPageEpisode();
+	private BasicEpisode parseOneEpisode(String s) throws ParseException {
+		BasicEpisode e = new BasicEpisode();
 
-		e.setSeason(Byte.parseByte(parseString(s, EPISODE_SEASON)));
-		e.setEpisode(Byte.parseByte(parseString(s, EPISODE_EPISODE)));
+		e.setSeason(Integer.parseInt(getString(s, EPISODE_SEASON)));
+		e.setEpisode(Integer.parseInt(getString(s, EPISODE_EPISODE)));
 
-		e.setSmallPosterUrl("http:" + parseString(s, POSTER));
+		e.setPosterHash(getString(s, POSTER));
 
-		e.setNameEn(parseString(s, NAME_EN));
-		e.setNameRu(parseString(s, NAME_RU));
+		e.setNameEn(getString(s, NAME_EN));
+		e.setNameRu(getString(s, NAME_RU));
 
 		e.setHasHQ(HQ.matcher(s).find());
 		e.setHasEnAudio(AUDIO_EN.matcher(s).find());

@@ -1,4 +1,4 @@
-package tv.turbik;
+package org.gigahub.turbofilm;
 
 import android.app.Application;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -7,14 +7,14 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EApplication;
-import tv.turbik.client.TurboFilmClient;
+import org.gigahub.turbofilm.client.TurboFilmClient;
 
 /**
  * @author Pavel Savinov aka swap_i
  * @since 1.0.0
  */
 @EApplication
-public class TurboApp extends Application {
+public class TurboApplication extends Application {
 
 	@Bean TurboFilmClient client;
 

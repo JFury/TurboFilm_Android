@@ -1,22 +1,24 @@
-package tv.turbik.client.toolbar.series;
+package org.gigahub.turbofilm.client.container;
+
+import org.gigahub.turbofilm.client.model.BasicSeries;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Pavel Savinov
- * @version 19/08/14 21:43
+ * @author Pavel Savinov [swapii@gmail.com]
+ * @version 22.11.13 13:38
  */
 public class ToolbarSeriesContainer {
 
-	private List<ToolbarSeries> mySeries = new ArrayList<ToolbarSeries>();
-	private List<ToolbarSeries> otherSeries = new ArrayList<ToolbarSeries>();
+	private List<BasicSeries> mySeries = new ArrayList<BasicSeries>();
+	private List<BasicSeries> otherSeries = new ArrayList<BasicSeries>();
 
-	public List<ToolbarSeries> getMySeries() {
+	public List<BasicSeries> getMySeries() {
 		return mySeries;
 	}
 
-	public List<ToolbarSeries> getOtherSeries() {
+	public List<BasicSeries> getOtherSeries() {
 		return otherSeries;
 	}
 

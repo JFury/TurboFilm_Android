@@ -1,6 +1,4 @@
-package tv.turbik.client.home;
-
-import tv.turbik.client.toolbar.ToolbarContainer;
+package org.gigahub.turbofilm.client.container;
 
 /**
  * @author Pavel Savinov [swapii@gmail.com]
@@ -8,14 +6,14 @@ import tv.turbik.client.toolbar.ToolbarContainer;
  */
 public class HomePage {
 
-	private ToolbarContainer toolbarContainer;
+	private ToolbarSeriesContainer topSeries;
 
-	public void setToolbarContainer(ToolbarContainer topSeries) {
-		this.toolbarContainer = topSeries;
+	public void setTopSeries(ToolbarSeriesContainer topSeries) {
+		this.topSeries = topSeries;
 	}
 
-	public ToolbarContainer getToolbarContainer() {
-		return toolbarContainer;
+	public ToolbarSeriesContainer getTopSeries() {
+		return topSeries;
 	}
 
 }

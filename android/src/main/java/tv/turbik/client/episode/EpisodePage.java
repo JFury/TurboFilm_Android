@@ -1,4 +1,6 @@
-package tv.turbik.client.episode;
+package org.gigahub.turbofilm.client.container;
+
+import org.gigahub.turbofilm.client.model.VideoMeta;
 
 /**
  * @author Pavel Savinov [swapii@gmail.com]
@@ -6,29 +8,8 @@ package tv.turbik.client.episode;
  */
 public class EpisodePage {
 
-	private String nameEn;
-	private String nameRu;
-
 	private String hash;
-	private String metaData;
-
-	private String smallPosterUrl;
-
-	public String getNameEn() {
-		return nameEn;
-	}
-
-	public void setNameEn(String nameEn) {
-		this.nameEn = nameEn;
-	}
-
-	public String getNameRu() {
-		return nameRu;
-	}
-
-	public void setNameRu(String nameRu) {
-		this.nameRu = nameRu;
-	}
+	private VideoMeta metaData;
 
 	public String getHash() {
 		return hash;
@@ -38,20 +19,12 @@ public class EpisodePage {
 		this.hash = hash;
 	}
 
-	public String getMetaData() {
+	public VideoMeta getMetaData() {
 		return metaData;
 	}
 
-	public void setMetaData(String metaData) {
+	public void setMetaData(VideoMeta metaData) {
 		this.metaData = metaData;
-	}
-
-	public String getSmallPosterUrl() {
-		return smallPosterUrl;
-	}
-
-	public void setSmallPosterUrl(String smallPosterUrl) {
-		this.smallPosterUrl = smallPosterUrl;
 	}
 
 }

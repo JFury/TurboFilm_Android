@@ -1,4 +1,4 @@
-package tv.turbik.client.episode;
+package org.gigahub.turbofilm.client.model;
 
 /**
  * @author Pavel Savinov [swapii@gmail.com]
