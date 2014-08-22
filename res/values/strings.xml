@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="app_name">Турбофильм</string>
+
+	<string name="auth_login_label">Логин:</string>
+	<string name="auth_pass_label">Пароль:</string>
+	<string name="auth_signin_button">Впустите меня</string>
+
+</resources>

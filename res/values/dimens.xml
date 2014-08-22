@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<dimen name="offset_big">20dp</dimen>
+	<dimen name="offset_normal">10dp</dimen>
+	<dimen name="offset_small">5dp</dimen>
+
+	<dimen name="series_square_logo">40dp</dimen>
+
+	<dimen name="text_big">14pt</dimen>
+
+</resources>

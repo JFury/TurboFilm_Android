@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+
+	<org.gigahub.turbofilm.ui.AspectRatioImageView
+		app:aspectRatio="0.34183673469388"
+		android:id="@+id/poster"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="0.5"
+		android:scaleType="centerCrop" />
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="0.5"
+		android:paddingTop="@dimen/offset_small"
+		android:paddingBottom="@dimen/offset_small"
+		android:paddingLeft="@dimen/offset_normal"
+		android:paddingRight="@dimen/offset_normal"
+		android:background="@color/back_transparent">
+
+		<TextView
+			style="@style/TextShadow"
+			android:id="@+id/nameEnText"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textColor="@color/blue" />
+
+		<TextView
+			style="@style/TextShadow"
+			android:id="@+id/nameRuText"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" />
+
+		<org.gigahub.turbofilm.ui.SeasonSelector
+			android:id="@+id/seasonSelector"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" />
+
+	</LinearLayout>
+
+</LinearLayout>

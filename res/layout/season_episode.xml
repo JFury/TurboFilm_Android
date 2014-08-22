@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+
+	<org.gigahub.turbofilm.ui.AspectRatioImageView
+		app:aspectRatio="0.56470588235294"
+		android:id="@+id/frameImage"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:scaleType="centerCrop"/>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/offset_small"
+		android:paddingBottom="@dimen/offset_small"
+		android:paddingLeft="@dimen/offset_normal"
+		android:paddingRight="@dimen/offset_normal"
+		android:background="@color/back_gray">
+
+		<TextView
+			android:id="@+id/episodeText"
+			android:layout_alignParentRight="true"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="@dimen/offset_small"
+			android:maxLines="1"
+			android:textColor="@color/gray"
+			android:textSize="@dimen/text_big"/>
+
+		<TextView
+			style="@style/TextShadow"
+			android:id="@+id/nameEnText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:maxLines="1"
+			android:ellipsize="end"
+			android:textColor="@color/blue" />
+
+		<TextView
+			style="@style/TextShadow"
+			android:id="@+id/nameRuText"
+			android:layout_below="@+id/nameEnText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:maxLines="1"
+			android:ellipsize="end" />
+
+	</RelativeLayout>
+
+
+</LinearLayout>
