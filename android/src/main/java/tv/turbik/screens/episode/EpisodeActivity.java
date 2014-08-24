@@ -41,7 +41,7 @@ public class EpisodeActivity extends SherlockActivity {
 
 		getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.semi_transparent));
 
-		//getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
 		controls.setVideo(video);
 

@@ -1,5 +1,7 @@
 package tv.turbik.screens.season;
 
+import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -27,10 +29,10 @@ import java.util.List;
 @EActivity(R.layout.season)
 public class SeasonActivity extends SherlockActivity {
 
-	@ViewById ImageView poster;
-	@ViewById TextView nameEnText;
-	@ViewById TextView nameRuText;
-	@ViewById SeasonSelector seasonSelector;
+	ImageView icon;
+	TextView nameEn;
+	TextView nameRu;
+	SeasonSelector seasonText;
 
 	@ViewById GridView grid;
 
@@ -41,8 +43,10 @@ public class SeasonActivity extends SherlockActivity {
 
 	private ArrayAdapter<Episode> adapter;
 
-	@AfterViews
-	void afterViews() {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
 
 		ActionBar actionBar = getSupportActionBar();
 
@@ -51,18 +55,23 @@ public class SeasonActivity extends SherlockActivity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(false);
 
+		View view = actionBar.getCustomView();
+		icon = (ImageView) view.findViewById(R.id.icon);
+		nameEn = (TextView) view.findViewById(R.id.name_en);
+		nameRu = (TextView) view.findViewById(R.id.name_ru);
+		seasonText = (SeasonSelector) view.findViewById(R.id.season_text);
+	}
+
+	@AfterViews
+	void afterViews() {
 
 		Series series = client.getSeries(seriesAlias);
-		nameEnText.setText(series.getNameEn());
-		nameRuText.setText(series.getNameRu());
 
-		seasonSelector.setSeasonCount(series.getSeasonsCount());
+		nameEn.setText(series.getNameEn());
+		nameRu.setText(series.getNameRu());
 
-		ImageLoader.getInstance().displayImage(Images.seriesSmallSquare(series.getId()), poster);
-
-		adapter = new EpisodeAdapter(this);
-
-		seasonSelector.setSeasonListener(new SeasonNumberDialog.SeasonListener() {
+		seasonText.setSeasonCount(series.getSeasonsCount());
+		seasonText.setSeasonListener(new SeasonNumberDialog.SeasonListener() {
 					@Override
 					public void seasonSelected(byte season) {
 						SeasonActivity_.intent(SeasonActivity.this)
@@ -71,6 +80,10 @@ public class SeasonActivity extends SherlockActivity {
 								.start();
 					}
 				});
+
+		ImageLoader.getInstance().displayImage(Images.seriesSmallSquare(series.getId()), icon);
+
+		adapter = new EpisodeAdapter(this);
 		grid.setAdapter(adapter);
 
 		loadData();
@@ -88,15 +101,12 @@ public class SeasonActivity extends SherlockActivity {
 
 	@Background
 	void loadData() {
-
 		try {
 			List<Episode> episodeList = client.getEpisodes(seriesAlias, season, false);
 			update(episodeList);
-
 		} catch (TurboException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@UiThread
