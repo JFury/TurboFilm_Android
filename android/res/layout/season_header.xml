@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:orientation="horizontal"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -10,15 +11,16 @@
 		android:id="@+id/icon"
 		android:layout_width="36dp"
 		android:layout_height="36dp"
-		android:layout_marginLeft="@dimen/offset_tiny"
-		android:layout_marginRight="@dimen/offset_small" />
+		android:layout_marginLeft="@dimen/offset_text_big"
+		android:layout_marginRight="@dimen/offset_text_big" />
 
 	<TextView
 		style="@style/Header_Name"
 		android:id="@+id/name_en"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:textColor="@color/name_en_text" />
+		android:textColor="@color/name_en_text"
+		tools:text="The Big Bang Theory"/>
 
 	<TextView
 		style="@style/Header_Name"
@@ -32,14 +34,15 @@
 		style="@style/Header_Name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="@dimen/offset_text_normal" />
+		android:layout_marginLeft="@dimen/offset_text_normal"
+		tools:text="Теория Большого Взрыва"/>
 
 	<tv.turbik.ui.SeasonSelector
 		style="@style/Header_Name"
 		android:id="@+id/season_selector"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="@dimen/offset_text_normal"
+		android:layout_marginLeft="@dimen/offset_text_big"
 		android:paddingRight="@dimen/offset_normal"
 		android:textColor="@color/minor_text" />
 

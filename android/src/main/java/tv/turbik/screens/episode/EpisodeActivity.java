@@ -93,7 +93,7 @@ public class EpisodeActivity extends SherlockActivity {
 
 		try {
 
-			Episode episodeItem = client.getEpisode(seriesAlias, season, episode, false);
+			Episode episodeItem = client.getEpisode(seriesAlias, season, episode, true);
 			update(episodeItem);
 
 		} catch (NotLoggedInException e) {

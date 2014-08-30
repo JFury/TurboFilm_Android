@@ -11,6 +11,7 @@
 		style="@style/Header_Name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginLeft="@dimen/offset_text_big"
 		android:textColor="@color/minor_text" />
 
 	<TextView
@@ -18,7 +19,7 @@
 		style="@style/Header_Name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="@dimen/offset_text_normal"
+		android:layout_marginLeft="@dimen/offset_text_big"
 		android:textColor="@color/name_en_text" />
 
 	<TextView

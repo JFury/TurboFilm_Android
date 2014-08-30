@@ -6,6 +6,10 @@
 	<dimen name="offset_normal">16dp</dimen>
 	<dimen name="offset_big">32dp</dimen>
 
+	<dimen name="offset_text_normal">4pt</dimen>
+	<dimen name="offset_text_big">8pt</dimen>
+
+
 	<dimen name="text_size_micro">12sp</dimen>
 	<dimen name="text_size_small">14sp</dimen>
 	<dimen name="text_size_medium">18sp</dimen>
@@ -15,6 +19,5 @@
 	<dimen name="row">48dp</dimen>
 	<dimen name="column_width">300dp</dimen>
 	<dimen name="progress">36dp</dimen>
-	<dimen name="offset_text_normal">4pt</dimen>
 
 </resources>
