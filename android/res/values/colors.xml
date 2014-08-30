@@ -8,4 +8,7 @@
 	<color name="back_gray">#1e1e1e</color>
 	<color name="semi_transparent">#99000000</color>
 
+	<color name="name_en_text">@color/blue</color>
+	<color name="minor_text">@color/gray</color>
+
 </resources>

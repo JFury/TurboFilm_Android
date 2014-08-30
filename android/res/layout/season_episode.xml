@@ -21,26 +21,24 @@
 		android:background="@color/back_gray">
 
 		<TextView
-			style="@style/TextShadow"
+			style="@style/GridItem_Name"
 			android:id="@+id/nameEnText"
 			android:layout_toLeftOf="@+id/episodeText"
 			android:layout_alignParentLeft="true"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:paddingTop="@dimen/offset_small"
-			android:textColor="@color/blue"
-			android:singleLine="true" />
+			android:textColor="@color/name_en_text" />
 
 		<TextView
-			style="@style/TextShadow"
+			style="@style/GridItem_Name"
 			android:id="@+id/nameRuText"
 			android:layout_below="@+id/nameEnText"
 			android:layout_toLeftOf="@+id/episodeText"
 			android:layout_alignParentLeft="true"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:paddingBottom="@dimen/offset_small"
-			android:singleLine="true" />
+			android:paddingBottom="@dimen/offset_small" />
 
 		<TextView
 			android:id="@+id/episodeText"
@@ -51,10 +49,9 @@
 			android:layout_centerVertical="true"
 			android:gravity="center_vertical"
 			android:singleLine="true"
-			android:textColor="@color/gray"
+			android:textColor="@color/minor_text"
 			android:textSize="@dimen/text_size_huge" />
 
 	</RelativeLayout>
-
 
 </LinearLayout>
