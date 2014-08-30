@@ -15,5 +15,6 @@
 	<dimen name="row">48dp</dimen>
 	<dimen name="column_width">300dp</dimen>
 	<dimen name="progress">36dp</dimen>
+	<dimen name="offset_text_normal">4pt</dimen>
 
 </resources>

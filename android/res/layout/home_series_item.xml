@@ -23,19 +23,17 @@
 		android:padding="@dimen/offset_small">
 
 		<TextView
-			style="@style/TextShadow"
+			style="@style/GridItem_Name"
 			android:id="@+id/nameEnText"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:textColor="@color/blue"
-			android:singleLine="true"/>
+			android:textColor="@color/name_en_text" />
 
 		<TextView
-			style="@style/TextShadow"
+			style="@style/GridItem_Name"
 			android:id="@+id/nameRuText"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:singleLine="true"/>
+			android:layout_height="wrap_content" />
 
 	</LinearLayout>
 

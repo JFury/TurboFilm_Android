@@ -14,36 +14,33 @@
 		android:layout_marginRight="@dimen/offset_small" />
 
 	<TextView
+		style="@style/Header_Name"
 		android:id="@+id/name_en"
-		style="@style/TextShadow"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:textColor="@color/blue"
-		android:textSize="@dimen/text_size_large" />
+		android:textColor="@color/name_en_text" />
 
 	<TextView
+		style="@style/Header_Name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_margin="@dimen/offset_small"
-		android:text="/"
-		android:textSize="@dimen/text_size_large"/>
+		android:layout_marginLeft="@dimen/offset_text_normal"
+		android:text="/" />
 
 	<TextView
 		android:id="@+id/name_ru"
-		style="@style/TextShadow"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_weight="1"
-		android:textSize="@dimen/text_size_large"
-		android:singleLine="true"/>
-
-	<tv.turbik.ui.SeasonSelector
-		android:id="@+id/season_text"
+		style="@style/Header_Name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:paddingLeft="@dimen/offset_normal"
+		android:layout_marginLeft="@dimen/offset_text_normal" />
+
+	<tv.turbik.ui.SeasonSelector
+		style="@style/Header_Name"
+		android:id="@+id/season_selector"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="@dimen/offset_text_normal"
 		android:paddingRight="@dimen/offset_normal"
-		android:textColor="@color/gray"
-		android:textSize="@dimen/text_size_large" />
+		android:textColor="@color/minor_text" />
 
 </LinearLayout>

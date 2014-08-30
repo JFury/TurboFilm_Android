@@ -32,7 +32,7 @@ public class SeasonActivity extends SherlockActivity {
 	ImageView icon;
 	TextView nameEn;
 	TextView nameRu;
-	SeasonSelector seasonText;
+	SeasonSelector seasonSelector;
 
 	@ViewById GridView grid;
 
@@ -47,10 +47,9 @@ public class SeasonActivity extends SherlockActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-
 		ActionBar actionBar = getSupportActionBar();
 
-		actionBar.setCustomView(R.layout.season_bar);
+		actionBar.setCustomView(R.layout.season_header);
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(false);
@@ -59,7 +58,7 @@ public class SeasonActivity extends SherlockActivity {
 		icon = (ImageView) view.findViewById(R.id.icon);
 		nameEn = (TextView) view.findViewById(R.id.name_en);
 		nameRu = (TextView) view.findViewById(R.id.name_ru);
-		seasonText = (SeasonSelector) view.findViewById(R.id.season_text);
+		seasonSelector = (SeasonSelector) view.findViewById(R.id.season_selector);
 	}
 
 	@AfterViews
@@ -70,17 +69,17 @@ public class SeasonActivity extends SherlockActivity {
 		nameEn.setText(series.getNameEn());
 		nameRu.setText(series.getNameRu());
 
-		seasonText.setSeasonCount(series.getSeasonsCount());
-		seasonText.setSeason(season);
-		seasonText.setSeasonListener(new SeasonNumberDialog.SeasonListener() {
-					@Override
-					public void seasonSelected(byte season) {
-						SeasonActivity_.intent(SeasonActivity.this)
-								.seriesAlias(seriesAlias)
-								.season(season)
-								.start();
-					}
-				});
+		seasonSelector.setSeasonCount(series.getSeasonsCount());
+		seasonSelector.setSeason(season);
+		seasonSelector.setSeasonListener(new SeasonNumberDialog.SeasonListener() {
+			@Override
+			public void seasonSelected(byte season) {
+				SeasonActivity_.intent(SeasonActivity.this)
+						.seriesAlias(seriesAlias)
+						.season(season)
+						.start();
+			}
+		});
 
 		ImageLoader.getInstance().displayImage(Images.seriesSmallSquare(series.getId()), icon);
 
