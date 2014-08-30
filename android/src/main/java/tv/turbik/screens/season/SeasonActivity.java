@@ -71,6 +71,7 @@ public class SeasonActivity extends SherlockActivity {
 		nameRu.setText(series.getNameRu());
 
 		seasonText.setSeasonCount(series.getSeasonsCount());
+		seasonText.setSeason(season);
 		seasonText.setSeasonListener(new SeasonNumberDialog.SeasonListener() {
 					@Override
 					public void seasonSelected(byte season) {
