@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import tv.turbik.client.exception.client.ParseException;
+import tv.turbik.client.home.HomePage;
+import tv.turbik.client.home.HomePageParser;
 import tv.turbik.client.toolbar.series.ToolbarSeriesContainer;
 import tv.turbik.client.toolbar.series.ToolbarSeriesParser;
 
@@ -16,19 +18,19 @@ import java.io.IOException;
  */
 public class TopMenuParserTest {
 
-	private static ToolbarSeriesContainer container;
+	private static HomePage container;
 
 	@BeforeClass
 	public static void parse() throws IOException, ParseException {
 		String text = IOUtils.toString(TopMenuParserTest.class.getResourceAsStream("/pages/home.htm"));
-		container = new ToolbarSeriesParser().parse(text);
+		container = new HomePageParser().parse(text);
 	}
 
 	@Test
 	public void parseComplete() {
 		Assert.assertNotNull(container);
-		Assert.assertFalse(container.getMySeries().isEmpty());
-		Assert.assertFalse(container.getOtherSeries().isEmpty());
+		Assert.assertFalse(container.getToolbarContainer().getSeriesContainer().getMySeries().isEmpty());
+		Assert.assertFalse(container.getToolbarContainer().getSeriesContainer().getOtherSeries().isEmpty());
 	}
 
 }

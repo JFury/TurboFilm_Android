@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>DAO Generator</name>
-	<artifactId>dao_generator</artifactId>
+	<artifactId>tf-android-daogen</artifactId>
 
 	<parent>
 		<groupId>tv.turbik</groupId>
