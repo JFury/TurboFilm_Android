@@ -7,6 +7,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tv.turbik.client.TurboFilmClient;
 
 /**
@@ -34,6 +37,11 @@ public class TurboApp extends Application {
 				.build();
 
 		ImageLoader.getInstance().init(configuration);
+
+        LoggerFactory.getLogger("123").trace("123");
+        LoggerFactory.getLogger("123").trace("123");
+        LoggerFactory.getLogger("123").trace("123");
+        LoggerFactory.getLogger("123").trace("123");
 	}
 
 	@AfterInject
