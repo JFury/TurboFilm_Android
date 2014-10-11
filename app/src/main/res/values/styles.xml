@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<style name="TurboFilm" parent="Theme.Sherlock">
+	<style name="TurboFilm" parent="Theme.AppCompat">
 		<item name="android:windowBackground">@android:color/black</item>
 	</style>
 

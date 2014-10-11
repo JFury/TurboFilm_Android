@@ -1,13 +1,14 @@
 package tv.turbik.screens.season;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import org.androidannotations.annotations.*;
 import tv.turbik.R;
@@ -27,7 +28,7 @@ import java.util.List;
  * @version 23.11.13 12:38
  */
 @EActivity(R.layout.season)
-public class SeasonActivity extends SherlockActivity {
+public class SeasonActivity extends ActionBarActivity {
 
 	ImageView icon;
 	TextView nameEn;

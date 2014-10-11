@@ -1,8 +1,9 @@
 package tv.turbik.screens;
 
+import android.app.Activity;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import com.actionbarsherlock.app.SherlockActivity;
 import org.androidannotations.annotations.*;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.slf4j.Logger;
@@ -17,8 +18,9 @@ import tv.turbik.client.exception.server.NotLoggedInException;
  * @author Pavel Savinov aka swap_i
  * @since 1.0.0
  */
+@WindowFeature(Window.FEATURE_NO_TITLE)
 @EActivity(R.layout.auth)
-public class AuthActivity extends SherlockActivity {
+public class AuthActivity extends Activity {
 
 	private static final Logger L = LoggerFactory.getLogger(AuthActivity.class.getSimpleName());
 

@@ -1,9 +1,10 @@
 package tv.turbik.screens.home;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
@@ -26,7 +27,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @EActivity(R.layout.home)
-public class HomeActivity extends SherlockActivity {
+public class HomeActivity extends FragmentActivity {
 
 	private static final Logger L = LoggerFactory.getLogger(HomeActivity.class.getSimpleName());
 	private static final int AUTH_REQUEST = 0;

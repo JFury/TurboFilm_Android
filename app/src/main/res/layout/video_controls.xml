@@ -10,7 +10,7 @@
 	<ImageButton
 		android:id="@+id/playButton"
 		android:layout_width="wrap_content"
-		android:layout_height="@dimen/abs__action_bar_default_height"
+		android:layout_height="50dp"
 		android:paddingLeft="@dimen/offset_big"
 		android:paddingRight="@dimen/offset_big"
 		android:src="@drawable/ic_action_play"

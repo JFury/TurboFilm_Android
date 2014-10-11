@@ -1,12 +1,12 @@
 package tv.turbik.screens.episode;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.VideoView;
-import com.actionbarsherlock.app.SherlockActivity;
 import org.androidannotations.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ import tv.turbik.dao.Episode;
  * @version 23.11.13 13:08
  */
 @EActivity(R.layout.episode)
-public class EpisodeActivity extends SherlockActivity {
+public class EpisodeActivity extends Activity {
 
 	private static final Logger L = LoggerFactory.getLogger(EpisodeActivity.class.getSimpleName());
 
