@@ -10,5 +10,9 @@
 	<string name="auth_signin_button">Впустите меня</string>
 
 	<string name="season_text">Сезон %d</string>
+	<string name="ok">ОК</string>
+	<string name="auth_progress_text">Пробую войти…</string>
+	<string name="auth_error_wrongCredentials">Логин и пароль не подошли.</string>
+	<string name="auth_error_other">Что-то пошло не так… Еще разок?</string>
 
 </resources>
