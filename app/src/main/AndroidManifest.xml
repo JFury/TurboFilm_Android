@@ -22,7 +22,7 @@
 			android:windowSoftInputMode="adjustResize" />
 
 		<activity
-			android:name=".screens.home.HomeActivity_">
+			android:name=".screens.main.MainActivity_">
 
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -30,8 +30,6 @@
 			</intent-filter>
 
 			</activity>
-
-		<activity android:name=".screens.season.SeasonActivity_" />
 
 		<activity android:name=".screens.episode.EpisodeActivity_"
 			android:screenOrientation="landscape"/>

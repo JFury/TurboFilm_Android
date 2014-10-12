@@ -1,4 +1,4 @@
-package tv.turbik.screens.home;
+package tv.turbik.screens.main.series;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -19,11 +19,18 @@ import tv.turbik.client.TurboFilmClient;
 @EApplication
 public class TurboApp extends Application {
 
+	private static final Logger L = LoggerFactory.getLogger(TurboApp.class.getSimpleName());
+
 	@Bean TurboFilmClient client;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+
+		L.info("-");
+		L.info("-");
+		L.info("-");
+		L.warn("TurboFilm started");
 
 		DisplayImageOptions options = new DisplayImageOptions.Builder()
 				.cacheOnDisc(true)
@@ -37,11 +44,6 @@ public class TurboApp extends Application {
 				.build();
 
 		ImageLoader.getInstance().init(configuration);
-
-        LoggerFactory.getLogger("123").trace("123");
-        LoggerFactory.getLogger("123").trace("123");
-        LoggerFactory.getLogger("123").trace("123");
-        LoggerFactory.getLogger("123").trace("123");
 	}
 
 	@AfterInject

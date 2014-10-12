@@ -1,4 +1,4 @@
-package tv.turbik.screens.season;
+package tv.turbik.screens.main.season;
 
 import android.content.Context;
 import android.text.Html;
