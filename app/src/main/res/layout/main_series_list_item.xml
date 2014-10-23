@@ -5,7 +5,7 @@
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:padding="@dimen/offset_small"
+	android:layout_margin="@dimen/offset_small"
 	android:background="@color/back_gray">
 
 	<tv.turbik.ui.AspectRatioImageView

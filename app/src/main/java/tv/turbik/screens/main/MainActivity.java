@@ -3,8 +3,6 @@ package tv.turbik.screens.main;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
-import com.google.common.eventbus.Subscribe;
-
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -13,7 +11,7 @@ import org.androidannotations.annotations.EActivity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tv.turbik.EventBus;
+import tv.turbik.beans.EventBus;
 import tv.turbik.R;
 import tv.turbik.events.OpenSeriesEvent;
 import tv.turbik.screens.main.season.SeasonFragment;
@@ -49,8 +47,7 @@ public class MainActivity extends FragmentActivity {
 		L.info("Logo click");
 	}
 
-	@Subscribe
-	public void onOpenSeries(OpenSeriesEvent event) {
+	public void onEvent(OpenSeriesEvent event) {
 		seasonFragment.setParams(event.getSeries().getAlias(), (byte) 1);
 		showFragment(seasonFragment);
 	}

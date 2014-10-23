@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-import tv.turbik.EventBus;
+import tv.turbik.beans.EventBus;
 import tv.turbik.R;
 import tv.turbik.client.SmartClient;
 import tv.turbik.client.exception.TurboException;

@@ -8,8 +8,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import tv.turbik.EventBus_;
 import tv.turbik.R;
+import tv.turbik.beans.EventBus;
+import tv.turbik.beans.EventBus_;
 import tv.turbik.client.Images;
 import tv.turbik.dao.Series;
 import tv.turbik.events.OpenSeriesEvent;
@@ -20,7 +21,7 @@ import tv.turbik.events.OpenSeriesEvent;
 public class SeriesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 	private final Context context;
-	private final EventBus_ eventBus;
+	private final EventBus eventBus;
 	ImageView logo;
 	TextView nameEn;
 	TextView nameRu;
