@@ -1,78 +1,50 @@
 package tv.turbik.screens.main.series;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import tv.turbik.R;
-import tv.turbik.client.Images;
 import tv.turbik.dao.Series;
 
 /**
 * @author Pavel Savinov
 * @version 05/04/14 08:56
 */
-class SeriesAdapter extends ArrayAdapter<Series> {
+class SeriesAdapter extends RecyclerView.Adapter<SeriesViewHolder> {
 
 	private final LayoutInflater inflater;
-	private final ImageLoader imageLoader;
-	private final DisplayImageOptions options;
 
-	public SeriesAdapter(Context context, ImageLoader imageLoader, DisplayImageOptions options) {
-		super(context, 0);
-		this.imageLoader = imageLoader;
-		this.options = options;
-		inflater = LayoutInflater.from(getContext());
+	private List<Series> series = new ArrayList<Series>();
+
+	public SeriesAdapter(Context context) {
+		inflater = LayoutInflater.from(context);
 	}
 
 	@Override
-	public View getView(int position, View view, ViewGroup parent) {
-
-		final ViewHolder holder;
-
-		if (view == null) {
-			holder = new ViewHolder();
-			view = inflater.inflate(R.layout.home_series_item, parent, false);
-			view.setTag(holder);
-			holder.logo = (ImageView) view.findViewById(R.id.logo);
-			holder.nameEn = (TextView) view.findViewById(R.id.nameEnText);
-			holder.nameRu = (TextView) view.findViewById(R.id.nameRuText);
-		} else {
-			holder = (ViewHolder) view.getTag();
-		}
-
-		Series series = getItem(position);
-		holder.nameEn.setText(series.getNameEn());
-		holder.nameRu.setText(series.getNameRu());
-
-		imageLoader.displayImage(Images.seriesBigPoster(series.getId()), holder.logo, options, new SimpleImageLoadingListener(){
-			@Override
-			public void onLoadingStarted(String imageUri, View view) {
-				holder.logo.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-			}
-
-			@Override
-			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-				holder.logo.setScaleType(ImageView.ScaleType.CENTER_CROP);
-			}
-		});
-
-		return view;
+	public SeriesViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+		return new SeriesViewHolder(inflater.inflate(R.layout.main_series_list_item, viewGroup, false));
 	}
 
-	class ViewHolder {
+	@Override
+	public void onBindViewHolder(SeriesViewHolder holder, int i) {
+		Series seriesItem = series.get(i);
+		holder.setSeries(seriesItem);
+	}
 
-		private ImageView logo;
-		private TextView nameEn;
-		private TextView nameRu;
+	@Override
+	public int getItemCount() {
+		return series.size();
+	}
 
+	public void addSeries(List<Series> seriesList) {
+		this.series.clear();
+		this.series.addAll(seriesList);
+		notifyDataSetChanged();
 	}
 
 }

@@ -5,7 +5,8 @@
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:padding="@dimen/offset_small">
+	android:padding="@dimen/offset_small"
+	android:background="@color/back_gray">
 
 	<tv.turbik.ui.AspectRatioImageView
 		app:aspectRatio="0.34183673469388"
@@ -19,19 +20,18 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_gravity="bottom"
-		android:background="@color/back_gray"
 		android:padding="@dimen/offset_small">
 
 		<TextView
 			style="@style/GridItem_Name"
-			android:id="@+id/nameEnText"
+			android:id="@+id/name_en_text"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:textColor="@color/name_en_text" />
 
 		<TextView
 			style="@style/GridItem_Name"
-			android:id="@+id/nameRuText"
+			android:id="@+id/name_ru_text"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content" />
 

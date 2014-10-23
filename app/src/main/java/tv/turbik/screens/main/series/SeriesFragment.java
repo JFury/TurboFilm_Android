@@ -3,19 +3,13 @@ package tv.turbik.screens.main.series;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
@@ -30,7 +24,6 @@ import tv.turbik.client.SmartClient;
 import tv.turbik.client.exception.TurboException;
 import tv.turbik.client.exception.server.NotLoggedInException;
 import tv.turbik.dao.Series;
-import tv.turbik.events.OpenSeriesEvent;
 import tv.turbik.screens.AuthActivity_;
 
 /**
@@ -43,12 +36,12 @@ public class SeriesFragment extends Fragment {
 
 	private static final int AUTH_REQUEST = 0;
 
-	@ViewById GridView grid;
+	@ViewById RecyclerView grid;
 
 	@Bean SmartClient client;
 	@Bean EventBus eventBus;
 
-	private ArrayAdapter<Series> adapter;
+	private SeriesAdapter adapter;
 
 	@Override
 	public void onResume() {
@@ -59,27 +52,12 @@ public class SeriesFragment extends Fragment {
 	@AfterViews
 	void afterViews() {
 
-		final DisplayImageOptions options = new DisplayImageOptions.Builder()
-				.showStubImage(R.drawable.icon_movie)
-				.cacheInMemory(true)
-				.cacheOnDisc(true)
-				.displayer(new FadeInBitmapDisplayer(300))
-				.build();
+		adapter = new SeriesAdapter(grid.getContext());
 
-		final ImageLoader imageLoader = ImageLoader.getInstance();
-
-		adapter = new SeriesAdapter(grid.getContext(), imageLoader, options);
+		final GridLayoutManager gridLayoutManager = new GridLayoutManager(grid.getContext(), 2);
 
 		grid.setAdapter(adapter);
-
-		grid.setOnScrollListener(new PauseOnScrollListener(imageLoader, true, true));
-
-	}
-
-	@ItemClick
-	void gridItemClicked(int position) {
-		Series series = adapter.getItem(position);
-		eventBus.post(new OpenSeriesEvent(series));
+		grid.setLayoutManager(gridLayoutManager);
 	}
 
 	@Background
@@ -105,8 +83,7 @@ public class SeriesFragment extends Fragment {
 
 	@UiThread
 	void updateAdapter(List<Series> seriesList) {
-		adapter.clear();
-		adapter.addAll(seriesList);
+		adapter.addSeries(seriesList);
 		adapter.notifyDataSetChanged();
 	}
 

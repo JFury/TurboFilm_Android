@@ -5,13 +5,10 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<GridView
+	<android.support.v7.widget.RecyclerView
 		android:id="@+id/grid"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:columnWidth="250dp"
-		android:scrollbarStyle="outsideOverlay"
-		android:numColumns="auto_fit"
 		android:padding="@dimen/offset_small"/>
 
 </LinearLayout>
