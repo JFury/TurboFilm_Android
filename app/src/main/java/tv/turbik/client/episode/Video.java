@@ -1,10 +1,11 @@
 package tv.turbik.client.episode;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.digest.DigestUtils;
+import android.util.Base64;
+
 import tv.turbik.client.Parser;
 import tv.turbik.client.TurboFilmClient;
 import tv.turbik.client.exception.client.ParseException;
+import tv.turbik.utils.Utils;
 
 import java.util.regex.Pattern;
 
@@ -35,21 +36,21 @@ public class Video extends Parser {
 			source = source.replace("___", String.valueOf(encoded[i]));
 		}
 
-		return new String(Base64.decodeBase64(source.getBytes()));
+		return new String(Base64.decode(source.getBytes(), 0));
 	}
 
 	public static String generateUrl(VideoMeta meta, String hash, String lang, boolean isHq, int time) {
 
-		String p6 = DigestUtils.shaHex(hash + Math.random());
+		String p6 = Utils.sha1(hash + Math.random());
 
 		return new StringBuilder("https://cdn." + TurboFilmClient.DOMAIN + "/")
-				.append(DigestUtils.shaHex(lang)).append('/')
+				.append(Utils.sha1(lang)).append('/')
 				.append(meta.getEid()).append('/')
 				.append(isHq ? meta.getHqSource() : meta.getDefaultSource()).append('/')
 				.append(time).append('/')
 				.append(hash).append('/')
 				.append(p6).append('/')
-				.append(DigestUtils.shaHex(p6 + String.valueOf(meta.getEid()) + "A2DC51DE0F8BC1E9"))
+				.append(Utils.sha1(p6 + String.valueOf(meta.getEid()) + "A2DC51DE0F8BC1E9"))
 				.toString();
 
 	}

@@ -19,5 +19,8 @@
 	<dimen name="row">48dp</dimen>
 	<dimen name="column_width">300dp</dimen>
 	<dimen name="progress">36dp</dimen>
+	<dimen name="font_display_1">34sp</dimen>
+	<dimen name="font_title">20sp</dimen>
+	<dimen name="font_display_2">45sp</dimen>
 
 </resources>

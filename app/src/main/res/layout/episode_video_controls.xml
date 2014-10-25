@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:orientation="horizontal"
 	android:layout_width="match_parent"
-	android:layout_height="@dimen/row"
+	android:layout_height="wrap_content"
+	android:paddingLeft="@dimen/offset_big"
+	android:paddingRight="@dimen/offset_big"
+	android:paddingTop="@dimen/offset_normal"
+	android:paddingBottom="@dimen/offset_normal"
 	android:gravity="center_vertical"
 	android:background="@color/semi_transparent">
 
@@ -11,18 +16,19 @@
 		android:id="@+id/playButton"
 		android:layout_width="wrap_content"
 		android:layout_height="50dp"
-		android:paddingLeft="@dimen/offset_big"
-		android:paddingRight="@dimen/offset_big"
+		android:paddingLeft="@dimen/offset_normal"
+		android:paddingRight="@dimen/offset_normal"
 		android:src="@drawable/ic_action_play"
 		android:background="@null" />
 
 	<TextView
 		android:id="@+id/pastTime"
 		android:layout_width="wrap_content"
-		android:layout_height="match_parent"
-		android:paddingLeft="@dimen/offset_small"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="@dimen/offset_small"
 		android:paddingRight="@dimen/offset_normal"
-		android:gravity="center_vertical" />
+		android:gravity="center_vertical"
+		tools:text="1:23"/>
 
 	<SeekBar
 		android:id="@+id/seekBar"
@@ -33,9 +39,9 @@
 	<TextView
 		android:id="@+id/remainTime"
 		android:layout_width="wrap_content"
-		android:layout_height="match_parent"
+		android:layout_height="wrap_content"
 		android:paddingLeft="@dimen/offset_small"
-		android:paddingRight="@dimen/offset_big"
-		android:gravity="center_vertical" />
+		android:gravity="center_vertical"
+		tools:text="15:47"/>
 
 </LinearLayout>

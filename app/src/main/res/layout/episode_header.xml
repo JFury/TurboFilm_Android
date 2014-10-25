@@ -1,39 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
+	android:layout_height="wrap_content"
 	android:orientation="horizontal"
+	android:paddingLeft="@dimen/offset_big"
+	android:paddingRight="@dimen/offset_big"
+	android:paddingTop="@dimen/offset_normal"
+	android:paddingBottom="@dimen/offset_normal"
+	android:gravity="center_vertical"
+	android:background="@color/back_transparent"
 	android:weightSum="2">
 
-	<TextView
-		android:id="@+id/season_episode_number"
-		style="@style/Header_Name"
-		android:layout_width="wrap_content"
+	<LinearLayout
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="@dimen/offset_text_big"
-		android:textColor="@color/minor_text" />
+		android:layout_weight="1"
+		android:orientation="vertical">
+
+		<TextView
+			android:id="@+id/series_name_en_text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:textSize="@dimen/font_title"
+			android:textColor="@color/blue"
+			tools:text="The Big Bang Theory" />
+
+		<TextView
+			android:id="@+id/series_name_ru_text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:textSize="@dimen/font_title"
+			tools:text="Теория Большого Взрыва" />
+
+	</LinearLayout>
 
 	<TextView
-		android:id="@+id/name_en"
-		style="@style/Header_Name"
+		android:id="@+id/season_episode_text"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="@dimen/offset_text_big"
-		android:textColor="@color/name_en_text" />
+		android:layout_marginLeft="@dimen/offset_big"
+		android:layout_marginRight="@dimen/offset_normal"
+		android:singleLine="true"
+		android:textSize="@dimen/font_display_2"
+		tools:text="1.07"/>
 
-	<TextView
-		style="@style/Header_Name"
-		android:layout_width="wrap_content"
+	<LinearLayout
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="@dimen/offset_text_normal"
-		android:text="/" />
+		android:layout_weight="1"
+		android:orientation="vertical">
 
-	<TextView
-		android:id="@+id/name_ru"
-		style="@style/Header_Name"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginLeft="@dimen/offset_text_normal" />
+		<TextView
+			android:id="@+id/episode_name_en_text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:textSize="@dimen/font_title"
+			android:textColor="@color/blue"
+			tools:text="The Dumpling Paradox"/>
+
+		<TextView
+			android:id="@+id/episode_name_ru_text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:textSize="@dimen/font_title"
+			tools:text="Парадокс клецки" />
+
+	</LinearLayout>
 
 </LinearLayout>
