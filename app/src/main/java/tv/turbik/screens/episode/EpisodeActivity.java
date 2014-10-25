@@ -126,6 +126,11 @@ public class EpisodeActivity extends Activity {
 	}
 
 	@Click
+	void backButton() {
+		onBackPressed();
+	}
+
+	@Click
 	void centerPanel() {
 		switchControlsVisibility();
 	}

@@ -4,13 +4,19 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:orientation="horizontal"
-	android:paddingLeft="@dimen/offset_big"
-	android:paddingRight="@dimen/offset_big"
-	android:paddingTop="@dimen/offset_normal"
-	android:paddingBottom="@dimen/offset_normal"
+	android:padding="@dimen/offset_normal"
 	android:gravity="center_vertical"
 	android:background="@color/back_transparent"
 	android:weightSum="2">
+
+	<ImageButton
+		android:id="@+id/back_button"
+		android:layout_width="40dp"
+		android:layout_height="40dp"
+		android:layout_marginRight="@dimen/offset_normal"
+		android:src="@drawable/ic_arrow_back_white_36dp"
+		android:background="@android:color/transparent"
+		android:scaleType="center"/>
 
 	<LinearLayout
 		android:layout_width="0dp"
