@@ -8,6 +8,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.slf4j.Logger;
@@ -35,18 +36,13 @@ public class SeasonFragment extends Fragment {
 
 	@ViewById RecyclerView grid;
 
-	String seriesAlias;
-	byte season = 1;
+	@FragmentArg String seriesAlias;
+	@FragmentArg byte season = 1;
 
 	@Bean EventBus eventBus;
 	@Bean SmartClient client;
 
 	private EpisodeListAdapter adapter;
-
-	public void setParams(String seriesAlias, byte season) {
-		this.seriesAlias = seriesAlias;
-		this.season = season;
-	}
 
 	@AfterViews
 	void afterViews() {
@@ -57,14 +53,13 @@ public class SeasonFragment extends Fragment {
 		grid.setLayoutManager(gridLayoutManager);
 
 		new RecyclerViewColumnWidthTuner(grid, 200);
-
-		loadData();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
 		eventBus.register(this);
+		loadData();
 	}
 
 	@Override

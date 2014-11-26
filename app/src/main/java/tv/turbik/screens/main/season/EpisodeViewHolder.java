@@ -35,6 +35,8 @@ public class EpisodeViewHolder extends RecyclerView.ViewHolder implements View.O
 
 		context = itemView.getContext();
 
+		itemView.setOnClickListener(this);
+
 		int defaultColor = context.getResources().getColor(R.color.blue);
 		int defaultBackColor = context.getResources().getColor(R.color.back_gray);
 
