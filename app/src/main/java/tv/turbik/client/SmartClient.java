@@ -47,9 +47,11 @@ public class SmartClient {
 			seriesDao = new DaoMaster(helper.getWritableDatabase()).newSession().getSeriesDao();
 
 			seriesList.clear();
-			seriesDao.deleteAll();
 
 			SeriesPage page = rawClient.getSeriesPage();
+
+			// Удаляем только после того, как получили новую версию
+			seriesDao.deleteAll();
 
 			for (SeriesPageSeries pageSeries : page.getSeriesList()) {
 				Series series = new Series();
@@ -91,11 +93,13 @@ public class SmartClient {
 			episodeList.clear();
 
 			QueryBuilder<Episode> queryBuilder = getEpisodeListQueryBuilder(seriesAlias, season, episodeDao);
-			queryBuilder.buildDelete().executeDeleteWithoutDetachingEntities();
 
 			Series series = getSeries(seriesAlias);
 
 			SeasonPage seasonPage = rawClient.getSeasonPage(series.getAlias(), season);
+
+			// Удаляем только после того, как получили новую версию
+			queryBuilder.buildDelete().executeDeleteWithoutDetachingEntities();
 
 			for (SeasonPageEpisode seasonPageEpisode : seasonPage.getEpisodes()) {
 				Episode episode = new Episode();
@@ -128,11 +132,13 @@ public class SmartClient {
 			episodeDao = new DaoMaster(helper.getWritableDatabase()).newSession().getEpisodeDao();
 
 			builder = getEpisodeQueryBuilder(seriesAlias, season, episode, episodeDao);
-			builder.buildDelete().executeDeleteWithoutDetachingEntities();
 
 			episodeItem = new Episode();
 
 			EpisodePage page = rawClient.getEpisodePage(seriesAlias, season, episode);
+
+			// Удаляем только после того, как получили новую версию
+			builder.buildDelete().executeDeleteWithoutDetachingEntities();
 
 			episodeItem.setSeriesAlias(seriesAlias);
 			episodeItem.setSeason(season);

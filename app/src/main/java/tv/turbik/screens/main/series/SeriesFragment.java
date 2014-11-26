@@ -68,7 +68,7 @@ public class SeriesFragment extends Fragment {
 
 		try {
 
-			List<Series> series = client.getAllSeries(true);
+			List<Series> series = client.getAllSeries(false);
 
 			updateAdapter(series);
 
