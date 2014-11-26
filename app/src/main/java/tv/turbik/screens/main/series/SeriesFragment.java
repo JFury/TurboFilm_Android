@@ -27,6 +27,7 @@ import tv.turbik.client.exception.TurboException;
 import tv.turbik.client.exception.server.NotLoggedInException;
 import tv.turbik.dao.Series;
 import tv.turbik.screens.AuthActivity_;
+import tv.turbik.ui.RecyclerViewColumnWidthTuner;
 
 /**
  * Created by swap_i on 12/10/14.
@@ -43,7 +44,7 @@ public class SeriesFragment extends Fragment {
 	@Bean SmartClient client;
 	@Bean EventBus eventBus;
 
-	private SeriesAdapter adapter;
+	private SeriesListAdapter adapter;
 
 	@Override
 	public void onResume() {
@@ -54,23 +55,12 @@ public class SeriesFragment extends Fragment {
 	@AfterViews
 	void afterViews() {
 
-		adapter = new SeriesAdapter(grid.getContext());
+		GridLayoutManager gridLayoutManager = new GridLayoutManager(grid.getContext(), 2);
 
-		final GridLayoutManager gridLayoutManager = new GridLayoutManager(grid.getContext(), 2);
-
-		grid.setAdapter(adapter);
+		grid.setAdapter(adapter = new SeriesListAdapter());
 		grid.setLayoutManager(gridLayoutManager);
 
-		final DisplayMetrics metrics = getResources().getDisplayMetrics();
-
-		grid.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-			@Override
-			public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-				float width = grid.getWidth() / metrics.density;
-				L.trace("Grid witdth: " + width);
-				gridLayoutManager.setSpanCount((int) (width / 250));
-			}
-		});
+		new RecyclerViewColumnWidthTuner(grid, 250);
 	}
 
 	@Background

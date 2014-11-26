@@ -1,11 +1,10 @@
 package tv.turbik.screens.main.series;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +20,7 @@ import tv.turbik.beans.EventBus_;
 import tv.turbik.client.Images;
 import tv.turbik.dao.Series;
 import tv.turbik.events.OpenSeriesEvent;
+import tv.turbik.ui.PosterTarget;
 
 /**
  * Created by Pavel on 21.10.2014.
@@ -29,59 +29,32 @@ public class SeriesViewHolder extends RecyclerView.ViewHolder implements View.On
 
 	private static final Logger L = LoggerFactory.getLogger(SeriesViewHolder.class.getSimpleName());
 
-	private final int defaultColor;
-
 	private final Context context;
 	private final EventBus eventBus;
-
-	private final View container;
-	private final ImageView logo;
 	private final TextView nameEn;
 	private final TextView nameRu;
+	private final Target picassoTarget;
 
 	private Series series;
-	private Target picassoTarget;
 
-	public SeriesViewHolder(View view) {
-		super(view);
-		view.setOnClickListener(this);
+	public SeriesViewHolder(ViewGroup parentView) {
+		super(LayoutInflater.from(parentView.getContext()).inflate(R.layout.main_series_card, parentView, false));
 
-		context = view.getContext();
+		nameEn = (TextView) itemView.findViewById(R.id.name_en_text);
+		nameRu = (TextView) itemView.findViewById(R.id.name_ru_text);
+
+		View container = itemView.findViewById(R.id.container);
+		ImageView logo = ((ImageView) itemView.findViewById(R.id.logo));
+
+		itemView.setOnClickListener(this);
+
+		context = itemView.getContext();
 		eventBus = EventBus_.getInstance_(context);
 
-		container = view.findViewById(R.id.container);
-		logo = ((ImageView) view.findViewById(R.id.logo));
-		nameEn = (TextView) view.findViewById(R.id.name_en_text);
-		nameRu = (TextView) view.findViewById(R.id.name_ru_text);
+		int defaultTextColor = context.getResources().getColor(R.color.blue);
+		int defaultBackColor = context.getResources().getColor(R.color.back_gray);
 
-		defaultColor = context.getResources().getColor(R.color.blue);
-
-		picassoTarget = new Target() {
-			@Override
-			public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-
-				logo.setImageBitmap(bitmap);
-				logo.setVisibility(View.VISIBLE);
-
-				Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener() {
-					@Override
-					public void onGenerated(Palette palette) {
-						nameEn.setTextColor(palette.getVibrantColor(defaultColor));
-						container.setBackgroundColor(palette.getDarkMutedColor(R.color.back_gray));
-					}
-				});
-			}
-
-			@Override
-			public void onBitmapFailed(Drawable errorDrawable) {
-			}
-
-			@Override
-			public void onPrepareLoad(Drawable placeHolderDrawable) {
-			}
-
-		};
-
+		picassoTarget = new PosterTarget(container, logo, nameEn, defaultTextColor, defaultBackColor);
 	}
 
 	public void setSeries(final Series series) {
@@ -89,10 +62,6 @@ public class SeriesViewHolder extends RecyclerView.ViewHolder implements View.On
 
 		nameEn.setText(series.getNameEn());
 		nameRu.setText(series.getNameRu());
-
-		nameEn.setTextColor(defaultColor);
-		container.setBackgroundColor(context.getResources().getColor(R.color.back_gray));
-		logo.setVisibility(View.INVISIBLE);
 
 		Picasso.with(context)
 				.load(Images.seriesBigPoster(series.getId()))

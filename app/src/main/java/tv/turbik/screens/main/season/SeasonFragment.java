@@ -1,24 +1,28 @@
 package tv.turbik.screens.main.season;
 
 import android.support.v4.app.Fragment;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 import tv.turbik.R;
+import tv.turbik.beans.EventBus;
 import tv.turbik.client.SmartClient;
 import tv.turbik.client.exception.TurboException;
 import tv.turbik.dao.Episode;
+import tv.turbik.events.EpisodeSelectedEvent;
 import tv.turbik.screens.episode.EpisodeActivity_;
+import tv.turbik.ui.RecyclerViewColumnWidthTuner;
 
 /**
  * @author Pavel Savinov [swapii@gmail.com]
@@ -27,14 +31,17 @@ import tv.turbik.screens.episode.EpisodeActivity_;
 @EFragment(R.layout.main_season)
 public class SeasonFragment extends Fragment {
 
-	@ViewById GridView grid;
+	private static final Logger L = LoggerFactory.getLogger(SeasonFragment.class.getSimpleName());
+
+	@ViewById RecyclerView grid;
 
 	String seriesAlias;
 	byte season = 1;
 
+	@Bean EventBus eventBus;
 	@Bean SmartClient client;
 
-	private ArrayAdapter<Episode> adapter;
+	private EpisodeListAdapter adapter;
 
 	public void setParams(String seriesAlias, byte season) {
 		this.seriesAlias = seriesAlias;
@@ -44,15 +51,30 @@ public class SeasonFragment extends Fragment {
 	@AfterViews
 	void afterViews() {
 
-		adapter = new EpisodeAdapter(grid.getContext());
-		grid.setAdapter(adapter);
+		grid.setAdapter(adapter = new EpisodeListAdapter());
+
+		final GridLayoutManager gridLayoutManager = new GridLayoutManager(grid.getContext(), 1);
+		grid.setLayoutManager(gridLayoutManager);
+
+		new RecyclerViewColumnWidthTuner(grid, 200);
 
 		loadData();
 	}
 
-	@ItemClick
-	void gridItemClicked(int position) {
-		Episode episode = adapter.getItem(position);
+	@Override
+	public void onResume() {
+		super.onResume();
+		eventBus.register(this);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		eventBus.unregister(this);
+	}
+
+	public void onEvent(EpisodeSelectedEvent event) {
+		Episode episode = event.getEpisode();
 		EpisodeActivity_.intent(this)
 				.seriesAlias(episode.getSeriesAlias())
 				.season(episode.getSeason())
