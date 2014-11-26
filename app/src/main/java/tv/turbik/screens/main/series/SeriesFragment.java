@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.view.View;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -58,6 +60,17 @@ public class SeriesFragment extends Fragment {
 
 		grid.setAdapter(adapter);
 		grid.setLayoutManager(gridLayoutManager);
+
+		final DisplayMetrics metrics = getResources().getDisplayMetrics();
+
+		grid.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+			@Override
+			public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+				float width = grid.getWidth() / metrics.density;
+				L.trace("Grid witdth: " + width);
+				gridLayoutManager.setSpanCount((int) (width / 250));
+			}
+		});
 	}
 
 	@Background

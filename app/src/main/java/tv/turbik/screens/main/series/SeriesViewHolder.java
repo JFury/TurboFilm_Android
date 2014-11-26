@@ -29,6 +29,8 @@ public class SeriesViewHolder extends RecyclerView.ViewHolder implements View.On
 
 	private static final Logger L = LoggerFactory.getLogger(SeriesViewHolder.class.getSimpleName());
 
+	private final int defaultColor;
+
 	private final Context context;
 	private final EventBus eventBus;
 
@@ -52,6 +54,7 @@ public class SeriesViewHolder extends RecyclerView.ViewHolder implements View.On
 		nameEn = (TextView) view.findViewById(R.id.name_en_text);
 		nameRu = (TextView) view.findViewById(R.id.name_ru_text);
 
+		defaultColor = context.getResources().getColor(R.color.blue);
 
 		picassoTarget = new Target() {
 			@Override
@@ -63,7 +66,7 @@ public class SeriesViewHolder extends RecyclerView.ViewHolder implements View.On
 				Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener() {
 					@Override
 					public void onGenerated(Palette palette) {
-						nameEn.setTextColor(palette.getVibrantColor(android.R.color.white));
+						nameEn.setTextColor(palette.getVibrantColor(defaultColor));
 						container.setBackgroundColor(palette.getDarkMutedColor(R.color.back_gray));
 					}
 				});
@@ -87,7 +90,7 @@ public class SeriesViewHolder extends RecyclerView.ViewHolder implements View.On
 		nameEn.setText(series.getNameEn());
 		nameRu.setText(series.getNameRu());
 
-		nameEn.setTextColor(context.getResources().getColor(android.R.color.white));
+		nameEn.setTextColor(defaultColor);
 		container.setBackgroundColor(context.getResources().getColor(R.color.back_gray));
 		logo.setVisibility(View.INVISIBLE);
 
